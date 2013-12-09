@@ -1,0 +1,14 @@
+            == e-sim: Epiphany Architecture Simulator ==
+
+                -- Installation --
+
+e-sim uses a standard MSBuild solution. It can be built in any IDE that
+understands such files, or with e.g. XBuild:
+
+    $ xbuild e-sim.sln
+
+An extra parameter can be passed to build in release mode:
+
+    $ xbuild e-sim.sln /p:Configuration=Release
+
+The final binaries will end up in e-sim/bin/Debug or e-sim/bin/Release.

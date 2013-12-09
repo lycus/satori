@@ -1,0 +1,12 @@
+            == e-sim: Epiphany Architecture Simulator ==
+
+                -- Compatibility --
+
+e-sim is written in C# 5.0 and requires an appropriate C# compiler, such as
+Microsoft's compiler in .NET Framework 4.5+ or MCS from Mono 3.2.4+.
+
+Building e-sim requires either an IDE that can compile MSBuild projects or an
+equivalent command line tool, such as MSBuild or XBuild.
+
+Any operating system and architecture that .NET or Mono can run on should be
+supported by e-sim.

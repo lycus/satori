@@ -1,0 +1,34 @@
+            == e-sim: Epiphany Architecture Simulator ==
+
+                -- Introduction --
+
+e-sim is a simulator for the Epiphany processor architecture. Unlike the
+official CGEN simulator by Adapteva, e-sim features true concurrency and can
+simulate a full 4096-core eMesh.
+
+e-sim takes ELF binaries produced by the official Epiphany GCC and executes
+them out of the box. No extra steps are necessary. It is compatible with the
+system calls described in the Epiphany architecture manual, which are used by
+the Newlib C library included in the eSDK.
+
+For further information, see:
+
+    * LICENSE
+      - Licensing and copyright information.
+    * COMPATIBILITY
+      - Supported compilers, architectures, operating systems, etc.
+    * INSTALL
+      - Instructions on building and installing e-sim.
+    * AUTHORS
+      - Names and contact information for e-sim developers.
+    * CONTRIBUTING
+      - Notes and guidelines for contributors.
+
+You can reach the e-sim community in several ways:
+
+    * IRC channels
+      - #lycus @ irc.oftc.net
+    * Mailing lists
+      - lycus-announce: http://groups.google.com/group/lycus-announce
+      - lycus-discuss: http://groups.google.com/group/lycus-discuss
+      - lycus-develop: http://groups.google.com/group/lycus-develop
