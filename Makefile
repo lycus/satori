@@ -25,6 +25,6 @@ all:
 
 clean:
 	$(XBUILD) $(XBUILD_FLAGS) /target:Clean
-	$(RM) bin
+	$(RM) -r bin
 
 check: all
