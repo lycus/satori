@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{553E6F9C-02EA-4407-913E-4F414B7FB205}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lycus.Satori</RootNamespace>
+    <AssemblyName>Lycus.Satori</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1591</NoWarn>
+    <LangVersion>5</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>..\Lycus.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>5</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1591</NoWarn>
+    <DocumentationFile>bin\Release\Lycus.Satori.xml</DocumentationFile>
+    <CodeAnalysisRuleSet>..\Lycus.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\Lycus.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="Assembler.cs" />
+    <Compile Include="Assert.cs" />
+    <Compile Include="Capabilities.cs" />
+    <Compile Include="ConditionCode.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="CoreId.cs" />
+    <Compile Include="DebugUnit.cs" />
+    <Compile Include="DirectAccessEngine.cs" />
+    <Compile Include="EventTimer.cs" />
+    <Compile Include="ExceptionCause.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Fetcher.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Instruction.cs" />
+    <Compile Include="InstructionException.cs" />
+    <Compile Include="Instructions\AddImmediateInstruction.cs" />
+    <Compile Include="Instructions\AddInstruction.cs" />
+    <Compile Include="Instructions\AndInstruction.cs" />
+    <Compile Include="Instructions\ArithmeticShiftRightImmediateInstruction.cs" />
+    <Compile Include="Instructions\ArithmeticShiftRightInstruction.cs" />
+    <Compile Include="Instructions\BitReverseInstruction.cs" />
+    <Compile Include="Instructions\BranchInstruction.cs" />
+    <Compile Include="Instructions\BreakpointInstruction.cs" />
+    <Compile Include="Instructions\ExclusiveOrInstruction.cs" />
+    <Compile Include="Instructions\FixInstruction.cs" />
+    <Compile Include="Instructions\FloatAbsoluteInstruction.cs" />
+    <Compile Include="Instructions\FloatAddInstruction.cs" />
+    <Compile Include="Instructions\FloatInstruction.cs" />
+    <Compile Include="Instructions\FloatMultiplyAddInstruction.cs" />
+    <Compile Include="Instructions\FloatMultiplyInstruction.cs" />
+    <Compile Include="Instructions\FloatMultiplySubtractInstruction.cs" />
+    <Compile Include="Instructions\FloatSubtractInstruction.cs" />
+    <Compile Include="Instructions\GlobalInterruptDisableInstruction.cs" />
+    <Compile Include="Instructions\GlobalInterruptEnableInstruction.cs" />
+    <Compile Include="Instructions\IdleInstruction.cs" />
+    <Compile Include="Instructions\JumpInstruction.cs" />
+    <Compile Include="Instructions\JumpLinkInstruction.cs" />
+    <Compile Include="Instructions\LoadDisplacementInstruction.cs" />
+    <Compile Include="Instructions\LoadDisplacementPostModifyInstruction.cs" />
+    <Compile Include="Instructions\LoadIndexInstruction.cs" />
+    <Compile Include="Instructions\LoadPostModifyInstruction.cs" />
+    <Compile Include="Instructions\LogicalShiftLeftImmediateInstruction.cs" />
+    <Compile Include="Instructions\LogicalShiftLeftInstruction.cs" />
+    <Compile Include="Instructions\LogicalShiftRightImmediateInstruction.cs" />
+    <Compile Include="Instructions\LogicalShiftRightInstruction.cs" />
+    <Compile Include="Instructions\MoveFromSystemInstruction.cs" />
+    <Compile Include="Instructions\MoveHighImmediateInstruction.cs" />
+    <Compile Include="Instructions\MoveImmediateInstruction.cs" />
+    <Compile Include="Instructions\MoveInstruction.cs" />
+    <Compile Include="Instructions\MoveToSystemInstruction.cs" />
+    <Compile Include="Instructions\MulticoreBreakpointInstruction.cs" />
+    <Compile Include="Instructions\NoOperationInstruction.cs" />
+    <Compile Include="Instructions\OrInstruction.cs" />
+    <Compile Include="Instructions\ReturnInterruptInstruction.cs" />
+    <Compile Include="Instructions\StoreDisplacementInstruction.cs" />
+    <Compile Include="Instructions\StoreDisplacementPostModifyInstruction.cs" />
+    <Compile Include="Instructions\StoreIndexInstruction.cs" />
+    <Compile Include="Instructions\StorePostModifyInstruction.cs" />
+    <Compile Include="Instructions\SubtractImmediateInstruction.cs" />
+    <Compile Include="Instructions\SubtractInstruction.cs" />
+    <Compile Include="Instructions\SynchronizeInstruction.cs" />
+    <Compile Include="Instructions\TestSetInstruction.cs" />
+    <Compile Include="Instructions\TrapInstruction.cs" />
+    <Compile Include="Instructions\UnimplementedInstruction.cs" />
+    <Compile Include="Instructions\WiredAndInstruction.cs" />
+    <Compile Include="InternalException.cs" />
+    <Compile Include="Interrupt.cs" />
+    <Compile Include="InterruptController.cs" />
+    <Compile Include="InvalidInstructionEncodingEventArgs.cs" />
+    <Compile Include="InvalidInstructionEventArgs.cs" />
+    <Compile Include="InvalidMemoryAccessEventArgs.cs" />
+    <Compile Include="Kernel.cs" />
+    <Compile Include="Kernels\NullKernel.cs" />
+    <Compile Include="Kernels\UnixKernel.cs" />
+    <Compile Include="Loader.cs" />
+    <Compile Include="LoaderException.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Loggers\ConsoleLogger.cs" />
+    <Compile Include="Loggers\NullLogger.cs" />
+    <Compile Include="Loggers\StreamLogger.cs" />
+    <Compile Include="Machine.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="MemoryException.cs" />
+    <Compile Include="Operation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Lycus.snk">
+      <Link>Lycus.snk</Link>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
