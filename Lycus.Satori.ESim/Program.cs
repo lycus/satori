@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Lycus.Satori;
 using Lycus.Satori.Kernels;
 using Lycus.Satori.Loggers;
@@ -152,11 +153,8 @@ namespace Lycus.Satori.ESim
             foreach (var core in cores)
                 core.Registers.CoreStatus |= 1 << 0;
 
-            // Wait for cores to stop normally.
-            _machine.Join();
-
-            _machine.Dispose();
-            _machine = null;
+            while (cores.Any(x => (x.Registers.CoreStatus & 1 << 0) == 1))
+                Thread.Sleep(10);
 
             return 0;
         }
