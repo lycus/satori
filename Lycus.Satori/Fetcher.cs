@@ -44,6 +44,7 @@ namespace Lycus.Satori
             GC.SuppressFinalize(this);
         }
 
+        [CLSCompliant(false)]
         public bool AddFetcher(Func<uint, bool, Instruction> fetcher)
         {
             if (fetcher == null)
@@ -58,6 +59,7 @@ namespace Lycus.Satori
             return res;
         }
 
+        [CLSCompliant(false)]
         public bool RemoveFetcher(Func<uint, bool, Instruction> fetcher)
         {
             if (fetcher == null)
