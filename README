@@ -19,6 +19,8 @@ GCC can be executed without any extra steps. The default kernel provided by
 Satori is also compatible with the system calls that the Epiphany port of
 Newlib uses.
 
+Satori is a Japanese Buddhist term for enlightenment.
+
 For further information, see:
 
     * LICENSE
