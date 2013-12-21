@@ -1,15 +1,23 @@
-            == e-sim: Epiphany Architecture Simulator ==
+            == Satori: Libraries and Tools for Epiphany ==
 
                 -- Introduction --
 
-e-sim is a simulator for the Epiphany processor architecture. Unlike the
-official CGEN simulator by Adapteva, e-sim features true concurrency and can
-simulate a full 4096-core eMesh.
+Satori consists of two things: A library providing a unified interface for
+controlling Epiphany accelerator cores (whether simulated or silicon) and
+tools that provide command line interfaces to this functionality.
 
-e-sim takes ELF binaries produced by the official Epiphany GCC and executes
-them out of the box. No extra steps are necessary. It is compatible with the
-system calls described in the Epiphany architecture manual, which are used by
-the Newlib C library included in the eSDK.
+The library makes it trivial to write host-side applications that can be
+executed against real hardware, but also be developed and debugged with
+Satori's very fast built-in simulator which features true concurrency for
+the simulated cores (unlike the official CGEN simulator by Adapteva). The
+library also provides infrastructure for writing host-side kernels, as well
+as utilities such as an in-memory assembler and an ELF loader.
+
+The tools make it easy to run compiled ELF programs in both the simulator
+and on real hardware. Any ELF program compiled with the official Epiphany
+GCC can be executed without any extra steps. The default kernel provided by
+Satori is also compatible with the system calls that the Epiphany port of
+Newlib uses.
 
 For further information, see:
 
@@ -18,13 +26,13 @@ For further information, see:
     * COMPATIBILITY
       - Supported compilers, architectures, operating systems, etc.
     * INSTALL
-      - Instructions on building and installing e-sim.
+      - Instructions on building and installing Satori.
     * AUTHORS
-      - Names and contact information for e-sim developers.
+      - Names and contact information for Satori developers.
     * CONTRIBUTING
       - Notes and guidelines for contributors.
 
-You can reach the e-sim community in several ways:
+You can reach the Satori community in several ways:
 
     * IRC channels
       - #lycus @ irc.oftc.net

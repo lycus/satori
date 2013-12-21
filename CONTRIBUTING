@@ -1,4 +1,4 @@
-            == e-sim: Epiphany Architecture Simulator ==
+            == Satori: Libraries and Tools for Epiphany ==
 
                 -- Contributing --
 
@@ -15,7 +15,7 @@ Please avoid sending unrelated patches in the same review/patch series.
 All contributed code will go through the review process as described on
 the Lycus wiki: https://github.com/lycus/lycus.github.com/wiki/Review-Process
 
-Note that all code contributed to e-sim must be licensed under the terms
+Note that all code contributed to Satori must be licensed under the terms
 found in the LICENSE file. Additionally, copyright must be assigned to
 the Lycus Foundation when submitting contributions. The project
 maintainers reserve the right to alter the license at any point in time,

@@ -1,8 +1,8 @@
-            == e-sim: Epiphany Architecture Simulator ==
+            == Satori: Libraries and Tools for Epiphany ==
 
                 -- License --
 
-e-sim is available under the following license terms:
+Satori is available under the following license terms:
 
     The MIT License
 
@@ -26,5 +26,5 @@ e-sim is available under the following license terms:
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 
-This notice holds for all files shipped with e-sim. Therefore, it will not
+This notice holds for all files shipped with Satori. Therefore, it will not
 be present in individual files.

@@ -1,8 +1,8 @@
-            == e-sim: Epiphany Architecture Simulator ==
+            == Satori: Libraries and Tools for Epiphany ==
 
                 -- Style --
 
-This is a guide to the general code style used in the e-sim source base.
+This is a guide to the general code style used in the Satori source base.
 If you're contributing code to the project, you should make sure to
 follow these. We are rather strict about these rules as we believe that
 they help us keep a clean and consistent source base.
@@ -37,7 +37,7 @@ We roughly follow the conventions used in most C# code:
     * All type parameters are TPascalCase.
 
 You should have a VERY good reason if you're going to deviate from these
-naming rules. We want to keep e-sim's interfaces consistent with most
+naming rules. We want to keep Satori's interfaces consistent with most
 other C# code so using it doesn't feel awkward.
 
         ++ Comments ++
