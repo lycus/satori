@@ -2,6 +2,8 @@
 
                 -- Introduction --
 
+Satori is a Japanese Buddhist term for enlightenment.
+
 Satori consists of two things: A library providing a unified interface for
 controlling Epiphany accelerator cores (whether simulated or silicon) and
 tools that provide command line interfaces to this functionality.
@@ -18,8 +20,6 @@ and on real hardware. Any ELF program compiled with the official Epiphany
 GCC can be executed without any extra steps. The default kernel provided by
 Satori is also compatible with the system calls that the Epiphany port of
 Newlib uses.
-
-Satori is a Japanese Buddhist term for enlightenment.
 
 For further information, see:
 

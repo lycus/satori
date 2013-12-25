@@ -10,4 +10,5 @@ equivalent command line tool, such as MSBuild or XBuild. GNU Make can be used
 to build the project conveniently on POSIX systems.
 
 Any operating system and architecture that .NET or Mono can run on should be
-supported by Satori.
+supported by Satori, though the hardware interface is only guaranteed to work
+on Linux.
