@@ -115,8 +115,8 @@ namespace Lycus.Satori
                 case 0x0001:
                     if (bits[4])
                         return new StoreIndexInstruction(value, true);
-                    else
-                        return new LoadIndexInstruction(value, true);
+
+                    return new LoadIndexInstruction(value, true);
                 case 0x0002:
                     switch ((value & ~0xFC0F) >> 4)
                     {
@@ -164,18 +164,18 @@ namespace Lycus.Satori
                 case 0x0004:
                     if (bits[4])
                         return new StoreDisplacementInstruction(value, true);
-                    else
-                        return new LoadDisplacementInstruction(value, true);
+
+                    return new LoadDisplacementInstruction(value, true);
                 case 0x0005:
                     if (bits[4])
                         return new StoreDisplacementPostModifyInstruction(value, true);
-                    else
-                        return new LoadDisplacementPostModifyInstruction(value, true);
+
+                    return new LoadDisplacementPostModifyInstruction(value, true);
                 case 0x0006:
                     if (bits[4])
                         return new LogicalShiftLeftImmediateInstruction(value, true);
-                    else
-                        return new LogicalShiftRightImmediateInstruction(value, true);
+
+                    return new LogicalShiftRightImmediateInstruction(value, true);
                 case 0x0007:
                     switch ((value & ~0xFF8F) >> 4)
                     {
@@ -236,8 +236,8 @@ namespace Lycus.Satori
                 case 0x000E:
                     if (bits[4])
                         return new BitReverseInstruction(value, true);
-                    else
-                        return new ArithmeticShiftRightImmediateInstruction(value, true);
+
+                    return new ArithmeticShiftRightImmediateInstruction(value, true);
             }
 
             // It's not an instruction we know about. Ask any extended
@@ -246,13 +246,8 @@ namespace Lycus.Satori
 
             try
             {
-                foreach (var dec in _fetchers)
-                {
-                    var insn = dec(value, true);
-
-                    if (insn != null)
-                        return insn;
-                }
+                foreach (var insn in _fetchers.Select(dec => dec(value, true)).Where(insn => insn != null))
+                    return insn;
             }
             finally
             {
@@ -283,8 +278,8 @@ namespace Lycus.Satori
                     {
                         if (bits[4])
                             return new StoreIndexInstruction(value, false);
-                        else
-                            return new LoadIndexInstruction(value, false);
+
+                        return new LoadIndexInstruction(value, false);
                     }
 
                     if (bits[21] && !bits[22])
@@ -296,17 +291,15 @@ namespace Lycus.Satori
                     {
                         if (bits[28])
                             return new MoveHighImmediateInstruction(value);
-                        else
-                            return new MoveImmediateInstruction(value, false);
-                    }
-                    else
-                    {
-                        if (bits[4] && !bits[5] && !bits[6])
-                            return new AddImmediateInstruction(value, false);
 
-                        if (bits[4] && bits[5] && !bits[6])
-                            return new SubtractImmediateInstruction(value, false);
+                        return new MoveImmediateInstruction(value, false);
                     }
+
+                    if (bits[4] && !bits[5] && !bits[6])
+                        return new AddImmediateInstruction(value, false);
+
+                    if (bits[4] && bits[5] && !bits[6])
+                        return new SubtractImmediateInstruction(value, false);
 
                     break;
                 case 0x0000000C:
@@ -314,23 +307,21 @@ namespace Lycus.Satori
                     {
                         if (bits[4])
                             return new StoreDisplacementPostModifyInstruction(value, false);
-                        else
-                            return new LoadDisplacementPostModifyInstruction(value, false);
+
+                        return new LoadDisplacementPostModifyInstruction(value, false);
                     }
-                    else
-                    {
-                        if (bits[4])
-                            return new StoreDisplacementInstruction(value, false);
-                        else
-                            return new LoadDisplacementInstruction(value, false);
-                    }
+
+                    if (bits[4])
+                        return new StoreDisplacementInstruction(value, false);
+
+                    return new LoadDisplacementInstruction(value, false);
                 case 0x0000000D:
                     if (!bits[21] && !bits[22])
                     {
                         if (bits[4])
                             return new StorePostModifyInstruction(value);
-                        else
-                            return new LoadPostModifyInstruction(value);
+
+                        return new LoadPostModifyInstruction(value);
                     }
 
                     break;
@@ -360,8 +351,8 @@ namespace Lycus.Satori
                         case 0x00000006:
                             if (bits[4])
                                 return new LogicalShiftLeftImmediateInstruction(value, false);
-                            else
-                                return new LogicalShiftRightImmediateInstruction(value, false);
+
+                            return new LogicalShiftRightImmediateInstruction(value, false);
                         case 0x00000007:
                             switch ((value & ~0xFFFFFF8F) >> 4)
                             {
@@ -387,8 +378,8 @@ namespace Lycus.Satori
                         case 0x0000000E:
                             if (bits[4])
                                 return new BitReverseInstruction(value, false);
-                            else
-                                return new ArithmeticShiftRightImmediateInstruction(value, false);
+
+                            return new ArithmeticShiftRightImmediateInstruction(value, false);
                         case 0x0000000F:
                             return new UnimplementedInstruction(value);
                         case 0x0000000A:
@@ -425,13 +416,8 @@ namespace Lycus.Satori
 
             try
             {
-                foreach (var dec in _fetchers)
-                {
-                    var insn = dec(value, false);
-
-                    if (insn != null)
-                        return insn;
-                }
+                foreach (var insn in _fetchers.Select(dec => dec(value, false)).Where(insn => insn != null))
+                    return insn;
             }
             finally
             {

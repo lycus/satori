@@ -58,7 +58,7 @@ namespace Lycus.Satori
                     throw new LoaderException("ELF file version number is not EV_CURRENT.");
 
                 reader.ReadUInt32(); // The `e_entry` field.
-                uint phOff = reader.ReadUInt32(); // The `e_phoff` field.
+                var phOff = reader.ReadUInt32(); // The `e_phoff` field.
                 var shOff = reader.ReadUInt32(); // The `e_shoff` field.
 
                 if (reader.ReadUInt32() != 0x00000000)
