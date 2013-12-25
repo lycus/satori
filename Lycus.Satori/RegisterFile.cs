@@ -11,10 +11,11 @@ namespace Lycus.Satori
     ///
     /// Generally, writing to system registers is a bad idea as it
     /// can destabilize the state of a core. Instead, prefer public
-    /// APIs that deal with various system registers. Writing to
-    /// some registers, such as the general-purpose registers and
-    /// the program counter, is safe as long as the core is idle or
-    /// halted when the writing happens.
+    /// APIs that deal with various system registers. Reading from
+    /// and writing to system registers is 'safe' when a core is
+    /// executing, but may lead to undesired results. Accessing
+    /// general-purpose registers, however, is completely illegal
+    /// when a core is executing instructions.
     /// </summary>
     public sealed class RegisterFile
     {
