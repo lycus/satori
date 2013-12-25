@@ -90,7 +90,7 @@ namespace Lycus.Satori
             Timer = new EventTimer(this);
             DirectAccess = new DirectAccessEngine(this);
             Debugger = new DebugUnit(this);
-            Memory = new byte[Lycus.Satori.Memory.LocalMemorySize];
+            Memory = new byte[Satori.Memory.LocalMemorySize];
             MemoryLock = new object();
             MainTask = Task.Run(async () => await CoreLoop());
         }
