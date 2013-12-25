@@ -31,6 +31,17 @@ namespace Lycus.Satori
         bool _idle;
 
         /// <summary>
+        /// Fires on every core tick, regardless of whether any
+        /// instruction has been decoded and executed.
+        ///
+        /// This event is only fired in the simulator.
+        ///
+        /// This event is triggered on the thread pool, so a slow
+        /// event handler will not directly affect the core.
+        /// </summary>
+        public event EventHandler<TickEventArgs> Tick;
+
+        /// <summary>
         /// Fires if the core fails to match a bit pattern to a
         /// known instruction. The core will immediately enter a
         /// halted state after firing this event.
@@ -98,6 +109,11 @@ namespace Lycus.Satori
         {
             while (!Machine.Halting)
             {
+                var tevt = Tick;
+
+                if (tevt != null)
+                    new Task(() => tevt(this, new TickEventArgs(_idle))).Start();
+
                 Timer.IncrementClockCycles();
 
                 // Perform any DMA work that might have been scheduled.
