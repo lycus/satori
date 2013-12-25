@@ -156,13 +156,10 @@ namespace Lycus.Satori
                             // behavior, so just halt.
                             Registers.CoreStatus &= ~(1u << 0);
 
-                            new Task(() =>
-                            {
-                                var evt = InvalidInstruction;
+                            var evt = InvalidInstruction;
 
-                                if (evt != null)
-                                    evt(this, new InvalidInstructionEventArgs(pc, fullIns));
-                            }).Start();
+                            if (evt != null)
+                                new Task(() => evt(this, new InvalidInstructionEventArgs(pc, fullIns))).Start();
 
                             continue;
                         }
@@ -173,13 +170,10 @@ namespace Lycus.Satori
                     // Bad PC. This is undefined behavior, so just halt.
                     Registers.CoreStatus &= ~(1u << 0);
 
-                    new Task(() =>
-                    {
-                        var evt = InvalidMemoryAccess;
+                    var evt = InvalidMemoryAccess;
 
-                        if (evt != null)
-                            evt(this, new InvalidMemoryAccessEventArgs(ex.Address, ex.Write));
-                    }).Start();
+                    if (evt != null)
+                        new Task(() => evt(this, new InvalidMemoryAccessEventArgs(ex.Address, ex.Write))).Start();
 
                     continue;
                 }
@@ -193,13 +187,10 @@ namespace Lycus.Satori
                     // See comment above.
                     Registers.CoreStatus &= ~(1u << 0);
 
-                    new Task(() =>
-                    {
-                        var evt = InvalidInstructionEncoding;
+                    var evt = InvalidInstructionEncoding;
 
-                        if (evt != null)
-                            evt(this, new InvalidInstructionEncodingEventArgs(insn));
-                    }).Start();
+                    if (evt != null)
+                        new Task(() => evt(this, new InvalidInstructionEncodingEventArgs(insn))).Start();
 
                     continue;
                 }
@@ -218,13 +209,10 @@ namespace Lycus.Satori
                     // just halt.
                     Registers.CoreStatus &= ~(1u << 0);
 
-                    new Task(() =>
-                    {
-                        var evt = InvalidMemoryAccess;
+                    var evt = InvalidMemoryAccess;
 
-                        if (evt != null)
-                            evt(this, new InvalidMemoryAccessEventArgs(ex.Address, ex.Write));
-                    }).Start();
+                    if (evt != null)
+                        new Task(() => evt(this, new InvalidMemoryAccessEventArgs(ex.Address, ex.Write))).Start();
 
                     continue;
                 }
