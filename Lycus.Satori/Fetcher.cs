@@ -240,19 +240,24 @@ namespace Lycus.Satori
                         return new ArithmeticShiftRightImmediateInstruction(value, true);
             }
 
-            _lock.EnterReadLock();
-
             // It's not an instruction we know about. Ask any extended
             // decoders whether they understand it.
-            foreach (var dec in _fetchers)
+            _lock.EnterReadLock();
+
+            try
             {
-                var insn = dec(value, true);
+                foreach (var dec in _fetchers)
+                {
+                    var insn = dec(value, true);
 
-                if (insn != null)
-                    return insn;
+                    if (insn != null)
+                        return insn;
+                }
             }
-
-            _lock.ExitReadLock();
+            finally
+            {
+                _lock.ExitReadLock();
+            }
 
             // Doesn't look like a valid 16-bit instruction.
             return null;
@@ -418,15 +423,20 @@ namespace Lycus.Satori
             // this should happen very rarely, if ever.
             _lock.EnterReadLock();
 
-            foreach (var dec in _fetchers)
+            try
             {
-                var insn = dec(value, false);
+                foreach (var dec in _fetchers)
+                {
+                    var insn = dec(value, false);
 
-                if (insn != null)
-                    return insn;
+                    if (insn != null)
+                        return insn;
+                }
             }
-
-            _lock.ExitReadLock();
+            finally
+            {
+                _lock.ExitReadLock();
+            }
 
             // Doesn't look like a valid 32-bit instruction.
             return null;
