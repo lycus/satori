@@ -125,10 +125,7 @@ namespace Lycus.Satori
 
             var list = Grid[id.Row];
 
-            if (id.Column >= list.Count)
-                return null;
-
-            return list[id.Column];
+            return id.Column >= list.Count ? null : list[id.Column];
         }
 
         public void Join()

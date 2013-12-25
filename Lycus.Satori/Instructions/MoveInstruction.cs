@@ -43,11 +43,11 @@ namespace Lycus.Satori.Instructions
             SourceRegister = (int)((Value & ~0xFFFFE3FF) >> 10);
             DestinationRegister = (int)((Value & ~0xFFFF1FFF) >> 13);
 
-            if (!Is16Bit)
-            {
-                SourceRegister |= (int)((Value & ~0xE3FFFFFF) >> 26 << 3);
-                DestinationRegister |= (int)((Value & ~0x1FFFFFF) >> 29 << 3);
-            }
+            if (Is16Bit)
+                return;
+
+            SourceRegister |= (int)((Value & ~0xE3FFFFFF) >> 26 << 3);
+            DestinationRegister |= (int)((Value & ~0x1FFFFFF) >> 29 << 3);
         }
 
         public override Operation Execute(Core core)

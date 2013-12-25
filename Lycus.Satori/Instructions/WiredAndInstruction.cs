@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Lycus.Satori.Instructions
 {
@@ -28,25 +29,17 @@ namespace Lycus.Satori.Instructions
             // Flip the `WAND` bit on.
             core.Registers.CoreStatus |= (1 << 3);
 
-            var flag = true;
-
             // Check if all cores have the bit set. There is no need for
             // locking here, as the assumption is that cores will only
             // clear the bit in the ISR, which we trigger below.
-            foreach (var c in core.Machine.Cores)
-            {
-                if ((c.Registers.CoreStatus & 1 << 3) == 0)
-                {
-                    flag = false;
+            var flag = core.Machine.Cores.All(c => (c.Registers.CoreStatus & 1 << 3) != 0);
 
-                    break;
-                }
-            }
+            if (!flag)
+                return Operation.Next;
 
             // If the bit is set, trigger a `WAND` interrupt everywhere.
-            if (flag)
-                foreach (var c in core.Machine.Cores)
-                    c.Interrupts.Trigger(Interrupt.WiredAnd, ExceptionCause.None);
+            foreach (var c in core.Machine.Cores)
+                c.Interrupts.Trigger(Interrupt.WiredAnd, ExceptionCause.None);
 
             return Operation.Next;
         }

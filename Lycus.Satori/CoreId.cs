@@ -55,13 +55,7 @@ namespace Lycus.Satori
         }
 
         [CLSCompliant(false)]
-        public uint ToAddress()
-        {
-            return ToAddress(0);
-        }
-
-        [CLSCompliant(false)]
-        public uint ToAddress(uint raw)
+        public uint ToAddress(uint raw = 0)
         {
             return raw | ((uint)Row << 26) | ((uint)Column << 20);
         }

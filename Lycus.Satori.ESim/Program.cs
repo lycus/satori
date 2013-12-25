@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using Lycus.Satori;
 using Lycus.Satori.Kernels;
 using Lycus.Satori.Loggers;
 
@@ -23,10 +22,7 @@ namespace Lycus.Satori.ESim
 
             int result;
 
-            if (int.TryParse(value, out result))
-                return result;
-
-            return fallback;
+            return int.TryParse(value, out result) ? result : fallback;
         }
 
         static T ParseEnumVariable<T>(string variable, T fallback)
@@ -39,17 +35,12 @@ namespace Lycus.Satori.ESim
 
             T result;
 
-            if (Enum.TryParse<T>(value, out result))
-                return result;
-
-            return fallback;
+            return Enum.TryParse(value, out result) ? result : fallback;
         }
 
         static string GetStringVariable(string variable, string fallback)
         {
-            var value = Environment.GetEnvironmentVariable(variable);
-
-            return value != null ? value : fallback;
+            return Environment.GetEnvironmentVariable(variable) ?? fallback;
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -96,7 +87,7 @@ namespace Lycus.Satori.ESim
                     return 1;
             }
 
-            var arch = ParseEnumVariable<Architecture>("E_SIM_ARCH", Architecture.EpiphanyIV);
+            var arch = ParseEnumVariable("E_SIM_ARCH", Architecture.EpiphanyIV);
 
             _machine = new Machine(arch, new ConsoleLogger(), kern, r, c, m);
 
