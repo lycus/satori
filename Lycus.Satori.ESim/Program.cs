@@ -99,6 +99,7 @@ namespace Lycus.Satori.ESim
                 // down to the program being simulated.
                 if (args[0] == "--")
                 {
+                    // TODO: Actually use this.
                     args = args.Skip(1).ToArray();
                     break;
                 }
