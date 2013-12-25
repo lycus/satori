@@ -36,6 +36,8 @@ namespace Lycus.Satori
         /// known instruction. The core will immediately enter a
         /// halted state after firing this event.
         ///
+        /// This event is only fired in the simulator.
+        ///
         /// This event is triggered on the thread pool, so a slow
         /// event handler will not directly affect the core.
         /// </summary>
@@ -47,16 +49,32 @@ namespace Lycus.Satori
         /// immediately enter a halted state after firing this
         /// event.
         ///
+        /// This event is only fired in the simulator.
+        ///
         /// This event is triggered on the thread pool, so a slow
         /// event handler will not directly affect the core.
         /// </summary>
         public event EventHandler<InvalidInstructionEncodingEventArgs> InvalidInstructionEncoding;
 
         /// <summary>
+        /// Fires if a core executes an instruction without any
+        /// issues (such as decoding problems, invalid memory
+        /// access, etc).
+        ///
+        /// This event is only fired in the simulator.
+        ///
+        /// This event is triggered on the thread pool, so a slow
+        /// event handler will not directly affect the core.
+        /// </summary>
+        public event EventHandler<ValidInstructionEventArgs> ValidInstruction;
+
+        /// <summary>
         /// Fires if the core attempts to access an invalid memory
         /// location, whether through load/store instructions or
         /// DMA. The core will immediately enter a halted state
         /// after firing this event.
+        ///
+        /// This event is only fired in the simulator.
         ///
         /// This event is triggered on the thread pool, so a slow
         /// event handler will not directly affect the core.
@@ -221,6 +239,11 @@ namespace Lycus.Satori
                     if (insn.IsTimed)
                         Timer.IncrementInstructions((Registers.CoreConfig & ~0xFFF1FFFF) >> 17 == 0x4);
                 }
+
+                var vevt = ValidInstruction;
+
+                if (vevt != null)
+                    new Task(() => vevt(this, new ValidInstructionEventArgs(insn))).Start();
 
                 switch (op)
                 {
