@@ -4,6 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
+// HACK: To make compilation work with MCS.
+#pragma warning disable 0219
+#pragma warning disable 0414
+
 namespace Lycus.Satori.Kernels
 {
     public sealed class UnixKernel : Kernel
