@@ -1,5 +1,7 @@
+*.pidb
 *.suo
 *.user
+*.userprefs
 
 bin/*
 */bin/*
