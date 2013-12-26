@@ -123,6 +123,7 @@
     <Compile Include="InvalidInstructionEncodingEventArgs.cs" />
     <Compile Include="InvalidInstructionEventArgs.cs" />
     <Compile Include="InvalidMemoryAccessEventArgs.cs" />
+    <Compile Include="JetBrainsAnnotations.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Kernels\NullKernel.cs" />
     <Compile Include="Kernels\UnixKernel.cs" />
