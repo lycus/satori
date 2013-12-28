@@ -28,6 +28,22 @@ namespace Lycus.Satori.EExec
             set.WriteOptionDescriptions(Console.Out);
 
             Console.WriteLine();
+            Console.WriteLine("Min:max rows: {0}:{1}", Machine.MinRows, Machine.MaxRows);
+            Console.WriteLine("Min:max columns: {0}:{1}", Machine.MinColumns, Machine.MaxColumns);
+            Console.WriteLine("Min:max memory: 0x{0:X8}:0x{1:X8}", Memory.MinMemorySize, Memory.MaxMemorySize);
+            Console.WriteLine();
+            Console.WriteLine("Valid architecture values:");
+            Console.WriteLine();
+
+            foreach (var val in Enum.GetNames(typeof(Architecture)))
+                Console.WriteLine("  " + val);
+
+            Console.WriteLine();
+            Console.WriteLine("Valid kernel values:");
+            Console.WriteLine();
+            Console.WriteLine("  none: No host kernel.");
+            Console.WriteLine("  unix: Unix-like kernel.");
+            Console.WriteLine();
         }
 
         static void ShowVersion()
