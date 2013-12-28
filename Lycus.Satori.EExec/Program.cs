@@ -59,7 +59,7 @@ namespace Lycus.Satori.EExec
                 { "k|kernel=", "Specify host-side kernel.", v => kern = v },
             };
 
-            set.Parse(args);
+            args = set.Parse(args).ToArray();
 
             if (version)
             {
