@@ -46,6 +46,9 @@ namespace Lycus.Satori.EExec
             Console.WriteLine("  none: No host kernel.");
             Console.WriteLine("  unix: Unix-like kernel.");
             Console.WriteLine();
+            Console.WriteLine("All non-option arguments are interpreted as <file> <row> <column>");
+            Console.WriteLine("specifications, stating which ELF files to load to which core.");
+            Console.WriteLine();
         }
 
         static void ShowVersion()
