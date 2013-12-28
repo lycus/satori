@@ -149,7 +149,7 @@ namespace Lycus.Satori.EExec
                 if (row < 0 || row >= rows ||
                     column < 0 || column >= cols)
                 {
-                    Console.Error.WriteLine("Out-of-bounds row/column numbers given for {0}", file);
+                    Console.Error.WriteLine("Coordinates {0} * {1} for {2} are invalid", row, column, file);
                     return 1;
                 }
 
