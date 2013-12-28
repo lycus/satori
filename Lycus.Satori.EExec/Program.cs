@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using Lycus.Satori.Kernels;
 using Lycus.Satori.Loggers;
+using Mono.Options;
 
 namespace Lycus.Satori.EExec
 {
@@ -13,83 +14,106 @@ namespace Lycus.Satori.EExec
     {
         static Machine _machine;
 
-        static int ParseInt32Variable(string variable, int fallback)
+        static void ShowHelp(OptionSet set)
         {
-            var value = Environment.GetEnvironmentVariable(variable);
+            Console.WriteLine("This is e-exec, part of Satori.");
+            Console.WriteLine();
+            Console.WriteLine("Usage:");
+            Console.WriteLine();
+            Console.WriteLine("  e-exec [options]");
+            Console.WriteLine();
+            Console.WriteLine("Options:");
+            Console.WriteLine();
 
-            if (value == null)
-                return fallback;
+            set.WriteOptionDescriptions(Console.Out);
 
-            int result;
-
-            return int.TryParse(value, out result) ? result : fallback;
+            Console.WriteLine();
         }
 
-        static T ParseEnumVariable<T>(string variable, T fallback)
-            where T : struct
+        static void ShowVersion()
         {
-            var value = Environment.GetEnvironmentVariable(variable);
-
-            if (value == null)
-                return fallback;
-
-            T result;
-
-            return Enum.TryParse(value, out result) ? result : fallback;
-        }
-
-        static string GetStringVariable(string variable, string fallback)
-        {
-            return Environment.GetEnvironmentVariable(variable) ?? fallback;
+            Console.WriteLine("e-exec " + typeof(Program).Assembly.GetName().Version);
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         static int RealMain(string[] args)
         {
-            var r = ParseInt32Variable("E_SIM_ROWS", 8);
-            var c = ParseInt32Variable("E_SIM_COLS", 8);
+            var version = false;
+            var help = false;
+            var plat = false;
+            var rows = 8;
+            var cols = 8;
+            var emem = Memory.MinMemorySize;
+            var arch = Architecture.EpiphanyIV;
+            var kern = "unix";
 
-            if (r < Machine.MinRows || r > Machine.MaxRows ||
-                c < Machine.MinColumns || c > Machine.MaxColumns)
+            var set = new OptionSet
             {
-                Console.Error.WriteLine("Invalid E_SIM_ROWS * E_SIM_COLS values given");
+                { "v|version", "Show version information and exit.", v => version = v != null },
+                { "h|help", "Show this help message and exit.", v => help = v != null },
+                { "p|platform", "Use the hardware platform.", v => plat = v != null },
+                { "r|rows=", "Specify rows in the grid.", (int v) => rows = v },
+                { "c|cols=", "Specify columns in the grid.", (int v) => cols = v },
+                { "m|memory=", "Specify external memory segment size.", (int v) => emem = v },
+                { "a|arch=", "Specify Epiphany architecture version.", (Architecture v) => arch = v },
+                { "k|kernel=", "Specify host-side kernel.", v => kern = v },
+            };
+
+            set.Parse(args);
+
+            if (version)
+            {
+                ShowVersion();
+                return 0;
+            }
+
+            if (help)
+            {
+                ShowHelp(set);
+                return 0;
+            }
+
+            if (plat)
+            {
+                Console.Error.WriteLine("The hardware platform is not currently supported");
                 return 1;
             }
 
-            if (new CoreId(r - 1, c - 1).ToAddress() >= Memory.ExternalBaseAddress)
+            if (rows < Machine.MinRows || rows > Machine.MaxRows ||
+                cols < Machine.MinColumns || cols > Machine.MaxColumns)
             {
-                Console.Error.WriteLine("A E_SIM_ROWS * E_SIM_COLS grid would overlap external memory");
+                Console.Error.WriteLine("{0} * {1} grid specification is invalid", rows, cols);
                 return 1;
             }
 
-            var m = ParseInt32Variable("E_SIM_MLEN", Memory.MinMemorySize);
-
-            if (m < Memory.MinMemorySize || m > Memory.MaxMemorySize)
+            if (new CoreId(rows - 1, cols - 1).ToAddress() >= Memory.ExternalBaseAddress)
             {
-                Console.Error.WriteLine("Invalid E_SIM_MLEN value given");
+                Console.Error.WriteLine("A {0} * {1} grid would overlap external memory", rows, cols);
                 return 1;
             }
 
-            var k = GetStringVariable("E_SIM_KERN", "unix");
+            if (emem < Memory.MinMemorySize || emem > Memory.MaxMemorySize)
+            {
+                Console.Error.WriteLine("External memory segment size {0} is invalid", emem);
+                return 1;
+            }
 
-            Kernel kern;
+            Kernel kernel;
 
-            switch (k)
+            switch (kern)
             {
                 case "null":
-                    kern = new NullKernel();
+                    kernel = new NullKernel();
                     break;
                 case "unix":
-                    kern = new UnixKernel();
+                    kernel = new UnixKernel();
                     break;
                 default:
-                    Console.Error.WriteLine("Invalid E_SIM_KERN value given");
+                    Console.Error.WriteLine("{0} is not a known kernel", kern);
                     return 1;
             }
 
-            var arch = ParseEnumVariable("E_SIM_ARCH", Architecture.EpiphanyIV);
-
-            _machine = new Machine(arch, new ConsoleLogger(), kern, r, c, m);
+            _machine = new Machine(arch, new ConsoleLogger(), kernel, rows, cols, emem);
 
             var cores = new List<Core>();
 
@@ -122,8 +146,8 @@ namespace Lycus.Satori.EExec
                     return 1;
                 }
 
-                if (row < 0 || row >= r ||
-                    column < 0 || column >= c)
+                if (row < 0 || row >= rows ||
+                    column < 0 || column >= cols)
                 {
                     Console.Error.WriteLine("Out-of-bounds row/column numbers given for {0}", file);
                     return 1;
