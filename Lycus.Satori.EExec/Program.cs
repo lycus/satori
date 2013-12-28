@@ -69,9 +69,9 @@ namespace Lycus.Satori.EExec
                 { "h|help", "Show this help message and exit.", v => help = v != null },
                 { "p|platform", "Use the hardware platform.", v => plat = v != null },
                 { "r|rows=", "Specify rows in the grid.", (int v) => rows = v },
-                { "c|cols=", "Specify columns in the grid.", (int v) => cols = v },
+                { "c|columns=", "Specify columns in the grid.", (int v) => cols = v },
                 { "m|memory=", "Specify external memory segment size.", (int v) => emem = v },
-                { "a|arch=", "Specify Epiphany architecture version.", (Architecture v) => arch = v },
+                { "a|architecture=", "Specify Epiphany architecture version.", (Architecture v) => arch = v },
                 { "k|kernel=", "Specify host-side kernel.", v => kern = v },
             };
 
