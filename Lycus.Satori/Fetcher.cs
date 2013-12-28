@@ -16,7 +16,7 @@ namespace Lycus.Satori
 
         bool _disposed;
 
-        internal Fetcher(Machine machine)
+        public Fetcher(Machine machine)
         {
             Machine = machine;
             _fetchers = new HashSet<Func<uint, bool, Instruction>>();
