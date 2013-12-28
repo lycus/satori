@@ -21,6 +21,8 @@ namespace Lycus.Satori.EExec
             Console.WriteLine("Usage:");
             Console.WriteLine();
             Console.WriteLine("  e-exec [options]... {<file> <row> <column>}...");
+            Console.WriteLine("  e-exec [options]... program.elf 4 6");
+            Console.WriteLine("  e-exec [options]... prog1.elf 1 1 prog2.elf 1 2");
             Console.WriteLine();
             Console.WriteLine("Options:");
             Console.WriteLine();
