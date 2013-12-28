@@ -11,6 +11,11 @@ namespace Lycus.Satori
 
         bool _disposed;
 
+        public MemoryStream Stream
+        {
+            get { return (MemoryStream)_writer.BaseStream; }
+        }
+
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public Assembler()
         {
@@ -37,11 +42,6 @@ namespace Lycus.Satori
             Dispose(true);
 
             GC.SuppressFinalize(this);
-        }
-
-        public byte[] Copy()
-        {
-            return ((MemoryStream)_writer.BaseStream).ToArray();
         }
 
         protected void Emit(Instruction instruction)
