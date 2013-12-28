@@ -22,6 +22,18 @@ namespace Lycus.Satori
 
         public DebugUnit Debugger { get; private set; }
 
+        public bool TestPassed
+        {
+            get { return _testPassed; }
+            internal set { _testPassed = value; }
+        }
+
+        public bool TestFailed
+        {
+            get { return _testFailed; }
+            internal set { _testFailed = value; }
+        }
+
         internal byte[] Memory { get; private set; }
 
         internal object MemoryLock { get; private set; }
@@ -29,6 +41,10 @@ namespace Lycus.Satori
         internal Task MainTask { get; private set; }
 
         bool _idle;
+
+        volatile bool _testPassed;
+
+        volatile bool _testFailed;
 
         /// <summary>
         /// Fires on every core tick, regardless of whether any

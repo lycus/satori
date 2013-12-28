@@ -32,9 +32,7 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            // If we don't support system calls, or the trap code isn't
-            // equal to the system call code, simply halt the core.
-            if (core.Machine.Kernel.Capabilities.HasFlag(Capabilities.SystemCalls) && Code == 7)
+            if (Code == 7 && core.Machine.Kernel.Capabilities.HasFlag(Capabilities.SystemCalls))
             {
                 var r0 = core.Registers[0];
                 var r1 = core.Registers[1];
@@ -49,7 +47,19 @@ namespace Lycus.Satori.Instructions
                 core.Registers[3] = r3;
             }
             else
+            {
+                switch (Code)
+                {
+                    case 4:
+                        core.TestPassed = true;
+                        break;
+                    case 5:
+                        core.TestFailed = true;
+                        break;
+                }
+
                 core.Registers.CoreStatus &= ~(1u << 0);
+            }
 
             return Operation.Next;
         }

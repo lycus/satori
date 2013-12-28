@@ -193,7 +193,7 @@ namespace Lycus.Satori.EExec
             while (cores.Any(x => (x.Registers.CoreStatus & 1 << 0) == 1))
                 Thread.Sleep(10);
 
-            return 0;
+            return cores.Any(x => x.TestFailed) ? 1 : 0;
         }
 
         static int Main(string[] args)
