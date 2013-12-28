@@ -109,6 +109,9 @@ namespace Lycus.Satori
         {
             while (!Machine.Halting)
             {
+                if (Id == new CoreId(1, 1))
+                    await System.Console.In.ReadLineAsync();
+
                 var tevt = Tick;
 
                 if (tevt != null)

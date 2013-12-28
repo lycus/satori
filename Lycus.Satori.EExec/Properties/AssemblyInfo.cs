@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("e-sim")]
+[assembly: AssemblyTitle("e-exec")]
 [assembly: AssemblyDescription("An Epiphany processor architecture simulator with true concurrency.")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

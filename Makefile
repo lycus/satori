@@ -19,9 +19,9 @@ all:
 	$(XBUILD) $(XBUILD_FLAGS)
 	$(MKDIR) -p bin
 	$(CP) Lycus.Satori/bin/$(MODE)/Lycus.Satori.dll bin
-	$(CP) Lycus.Satori.ESim/bin/$(MODE)/e-sim.exe bin
-	$(SED) s/__MONO_OPTIONS__/$(mono_opt)/ e-sim.in > bin/e-sim
-	$(CHMOD) +x bin/e-sim
+	$(CP) Lycus.Satori.EExec/bin/$(MODE)/e-exec.exe bin
+	$(SED) s/__MONO_OPTIONS__/$(mono_opt)/ e-exec.in > bin/e-exec
+	$(CHMOD) +x bin/e-exec
 
 clean:
 	$(XBUILD) $(XBUILD_FLAGS) /target:Clean

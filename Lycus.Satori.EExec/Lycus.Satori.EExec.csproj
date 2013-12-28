@@ -7,8 +7,8 @@
     <ProjectGuid>{56E6A7C5-0480-43A6-A5F5-B9F56F03FDC7}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Lycus.Satori.ESim</RootNamespace>
-    <AssemblyName>e-sim</AssemblyName>
+    <RootNamespace>Lycus.Satori.EExec</RootNamespace>
+    <AssemblyName>e-exec</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
@@ -61,7 +61,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Lycus.Satori.ESim.Program</StartupObject>
+    <StartupObject>Lycus.Satori.EExec.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>

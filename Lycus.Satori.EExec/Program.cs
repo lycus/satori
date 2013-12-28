@@ -7,7 +7,7 @@ using System.Threading;
 using Lycus.Satori.Kernels;
 using Lycus.Satori.Loggers;
 
-namespace Lycus.Satori.ESim
+namespace Lycus.Satori.EExec
 {
     static class Program
     {
