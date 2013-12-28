@@ -48,7 +48,7 @@ namespace Lycus.Satori.EExec
 
         static void ShowVersion()
         {
-            Console.WriteLine("e-exec " + typeof(Program).Assembly.GetName().Version);
+            Console.WriteLine("Satori e-exec " + typeof(Program).Assembly.GetName().Version);
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
