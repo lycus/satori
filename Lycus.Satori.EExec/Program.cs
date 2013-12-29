@@ -47,7 +47,7 @@ namespace Lycus.Satori.EExec
             Console.WriteLine("  unix: Unix-like kernel.");
             Console.WriteLine();
             Console.WriteLine("All non-option arguments are interpreted as <file> <row> <column>");
-            Console.WriteLine("specifications, stating which ELF files to load to which core.");
+            Console.WriteLine("specifications, stating which ELF files to load to which cores.");
             Console.WriteLine();
         }
 
@@ -140,15 +140,6 @@ namespace Lycus.Satori.EExec
 
             while (args.Length != 0)
             {
-                // If we encounter `--`, we pass all remaining arguments
-                // down to the program being simulated.
-                if (args[0] == "--")
-                {
-                    // TODO: Actually use this.
-                    args = args.Skip(1).ToArray();
-                    break;
-                }
-
                 if (args.Length < 3)
                 {
                     Console.Error.WriteLine("Expected <file> <row> <column> arguments");
