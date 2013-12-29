@@ -50,6 +50,9 @@ namespace Lycus.Satori.Instructions
             {
                 switch (Code)
                 {
+                    case 3:
+                        core.ExitCode = core.Registers[0];
+                        break;
                     case 4:
                         core.TestPassed = true;
                         break;

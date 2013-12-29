@@ -34,6 +34,12 @@ namespace Lycus.Satori
             internal set { _testFailed = value; }
         }
 
+        public int ExitCode
+        {
+            get { return _exitCode; }
+            internal set { _exitCode = value; }
+        }
+
         internal byte[] Memory { get; private set; }
 
         internal object MemoryLock { get; private set; }
@@ -45,6 +51,8 @@ namespace Lycus.Satori
         volatile bool _testPassed;
 
         volatile bool _testFailed;
+
+        volatile int _exitCode;
 
         /// <summary>
         /// Fires on every core tick, regardless of whether any
