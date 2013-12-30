@@ -41,6 +41,9 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
+            core.Registers[DestinationRegister] =
+                Math.Abs(core.Registers[SourceRegister].ReinterpretAsSingle()).ReinterpretAsInt32();
+
             return Operation.Next;
         }
     }

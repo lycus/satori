@@ -44,6 +44,20 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
+            var src = core.Registers[SourceRegister];
+            var dst = 0;
+
+            const int bits = sizeof(int) * 8;
+
+            for (var i = 0; i < bits; i++)
+            {
+                var v = Bits.Extract(src, i, 1);
+
+                dst = Bits.Insert(dst, v, bits - 1 - i, 1);
+            }
+
+            core.Registers[DestinationRegister] = dst;
+
             return Operation.Next;
         }
     }
