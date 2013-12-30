@@ -54,6 +54,7 @@
     <Compile Include="Architecture.cs" />
     <Compile Include="Assembler.cs" />
     <Compile Include="Assert.cs" />
+    <Compile Include="Bits.cs" />
     <Compile Include="Capabilities.cs" />
     <Compile Include="ConditionCode.cs" />
     <Compile Include="Core.cs" />
