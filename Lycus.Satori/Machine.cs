@@ -106,9 +106,24 @@ namespace Lycus.Satori
                 var row = new List<Core>(columns);
 
                 for (var j = 0; j < columns; j++)
+                {
+                    // A core can't have row 0 and column 0 since routing
+                    // anything to it would be impossible; addresses with
+                    // the upper 12 bits all zero are mapped to the local
+                    // core memory.
+                    if (i == 0 && j == 0)
+                        break;
+
                     row.Add(new Core(this, new CoreId(i, j)));
+                }
 
                 cores.AddRange(row);
+
+                // See comment above. We don't want a `null` entry in the
+                // `Cores` list, so insert it here.
+                if (i == 0)
+                    row.Insert(0, null);
+
                 grid.Add(row);
             }
 
