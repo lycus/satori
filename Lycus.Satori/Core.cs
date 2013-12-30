@@ -133,8 +133,8 @@ namespace Lycus.Satori
         {
             while (!Machine.Halting)
             {
-                if (Id == new CoreId(1, 1))
-                    await System.Console.In.ReadLineAsync();
+                if (Id != new CoreId(1, 1))
+                    await Task.Delay(1000000000);
 
                 var tevt = Tick;
 
@@ -298,6 +298,9 @@ namespace Lycus.Satori
                         _idle = true;
                         break;
                 }
+
+                if (Id == new CoreId(1, 1))
+                    Console.ReadLine();
             }
         }
 
