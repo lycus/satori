@@ -255,7 +255,7 @@ namespace Lycus.Satori
                     continue;
                 }
 
-                Machine.Logger.TraceCore(this, insn.ToString());
+                Machine.Logger.TraceCore(this, "0x{0:X8}: {1}", insn.Value, insn);
 
                 var isInt = Bits.Extract(Registers.CoreConfig, 17, 3) == 0x4;
 
