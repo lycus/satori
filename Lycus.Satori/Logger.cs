@@ -42,7 +42,7 @@ namespace Lycus.Satori
 
         static bool HaveLogLevel(params string[] levels)
         {
-            return levels.Contains(Environment.GetEnvironmentVariable("E_SIM_LOG"));
+            return levels.Contains(Environment.GetEnvironmentVariable("SATORI_LOG"));
         }
 
         public void Verbose(string format, params object[] args)
