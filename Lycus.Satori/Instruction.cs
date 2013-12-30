@@ -32,6 +32,7 @@ namespace Lycus.Satori
 
         public virtual void Encode()
         {
+            // TODO: Make this `abstract`.
         }
 
         public virtual void Decode()
