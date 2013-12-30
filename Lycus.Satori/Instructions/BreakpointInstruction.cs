@@ -22,6 +22,9 @@ namespace Lycus.Satori.Instructions
 
         public override Operation Execute(Core core)
         {
+            if (core == null)
+                throw new ArgumentNullException("core");
+
             // Currently, we simply ignore this.
             return Operation.Next;
         }
