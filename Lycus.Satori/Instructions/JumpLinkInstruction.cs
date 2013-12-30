@@ -24,10 +24,10 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            SourceRegister = (int)((Value & ~0xFFFFE3FF) >> 10);
+            SourceRegister = (int)Bits.Extract(Value, 10, 3);
 
             if (!Is16Bit)
-                SourceRegister |= (int)((Value & ~0xE3FFFFFF) >> 26 << 3);
+                SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
         }
 
         public override Operation Execute(Core core)

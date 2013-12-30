@@ -25,7 +25,7 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            core.Registers.CoreStatus &= ~(1u << 1);
+            core.Registers.CoreStatus = Bits.Clear(core.Registers.CoreStatus, 1);
 
             return Operation.Next;
         }

@@ -173,14 +173,14 @@ namespace Lycus.Satori
                 // wake us up.
                 if (Debugger.Update())
                 {
-                    Registers.CoreStatus &= ~(1u << 0);
+                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
 
                     continue;
                 }
 
                 // If the `ACTIVE` bit is zero, just sleep until something
                 // wakes us up (such as a library user).
-                if ((Registers.CoreStatus & 1 << 0) == 0)
+                if (!Bits.Check(Registers.CoreStatus, 0))
                 {
                     await Task.Delay(Machine.SleepDuration).ConfigureAwait(false);
 
@@ -214,7 +214,7 @@ namespace Lycus.Satori
                         {
                             // This instruction is invalid. This is undefined
                             // behavior, so just halt.
-                            Registers.CoreStatus &= ~(1u << 0);
+                            Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
 
                             var evt = InvalidInstruction;
 
@@ -228,7 +228,7 @@ namespace Lycus.Satori
                 catch (MemoryException ex)
                 {
                     // Bad PC. This is undefined behavior, so just halt.
-                    Registers.CoreStatus &= ~(1u << 0);
+                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidMemoryAccess;
 
@@ -245,7 +245,7 @@ namespace Lycus.Satori
                 catch (InstructionException)
                 {
                     // See comment above.
-                    Registers.CoreStatus &= ~(1u << 0);
+                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidInstructionEncoding;
 
@@ -257,6 +257,8 @@ namespace Lycus.Satori
 
                 Machine.Logger.TraceCore(this, insn.ToString());
 
+                var isInt = Bits.Extract(Registers.CoreConfig, 17, 3) == 0x4;
+
                 Operation op;
 
                 try
@@ -267,7 +269,7 @@ namespace Lycus.Satori
                 {
                     // Bad memory access. This is undefined behavior, so
                     // just halt.
-                    Registers.CoreStatus &= ~(1u << 0);
+                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidMemoryAccess;
 
@@ -279,7 +281,7 @@ namespace Lycus.Satori
                 finally
                 {
                     if (insn.IsTimed)
-                        Timer.IncrementInstructions((Registers.CoreConfig & ~0xFFF1FFFF) >> 17 == 0x4);
+                        Timer.IncrementInstructions(isInt);
                 }
 
                 var vevt = ValidInstruction;
@@ -301,60 +303,59 @@ namespace Lycus.Satori
 
         public bool EvaluateCondition(ConditionCode condition)
         {
+            var status = Registers.CoreStatus;
+
+            var az = Bits.Check(status, 4);
+            var an = Bits.Check(status, 5);
+            var ac = Bits.Check(status, 6);
+            var av = Bits.Check(status, 7);
+            var bz = Bits.Check(status, 8);
+            var bn = Bits.Check(status, 9);
+
             switch (condition)
             {
                 case ConditionCode.Equal:
                     // AZ
-                    return (Registers.CoreStatus & 1 << 4) == 1;
+                    return az;
                 case ConditionCode.NotEqual:
                     // ~AZ
-                    return (Registers.CoreStatus & 1 << 4) == 0;
+                    return !az;
                 case ConditionCode.UnsignedGreaterThan:
                     // ~AZ & AC
-                    return (Registers.CoreStatus & 1 << 4) == 0 &&
-                        (Registers.CoreStatus & 1 << 6) == 1;
+                    return !az & ac;
                 case ConditionCode.UnsignedGreaterThanOrEqual:
                     // AC
-                    return (Registers.CoreStatus & 1 << 6) == 1;
+                    return ac;
                 case ConditionCode.UnsignedLessThanOrEqual:
                     // AZ | ~AC
-                    return (Registers.CoreStatus & 1 << 4) == 1 ||
-                        (Registers.CoreStatus & 1 << 6) == 0;
+                    return az | !ac;
                 case ConditionCode.UnsignedLessThan:
                     // ~AC
-                    return (Registers.CoreStatus & 1 << 6) == 0;
+                    return !ac;
                 case ConditionCode.SignedGreaterThan:
                     // ~AZ & AV == AN
-                    return (Registers.CoreStatus & 1 << 4) == 1 &&
-                        (Registers.CoreStatus & 1 << 7) ==
-                        (Registers.CoreStatus & 1 << 5);
+                    return !az & av == an;
                 case ConditionCode.SignedGreaterThanOrEqual:
                     // AV == AN
-                    return (Registers.CoreStatus & 1 << 7) ==
-                        (Registers.CoreStatus & 1 << 5);
+                    return av == an;
                 case ConditionCode.SignedLessThan:
                     // AV != AN
-                    return (Registers.CoreStatus & 1 << 7) !=
-                        (Registers.CoreStatus & 1 << 5);
+                    return av != an;
                 case ConditionCode.SignedLessThanOrEqual:
                     // AZ | AV != AN
-                    return (Registers.CoreStatus & 1 << 4) == 1 ||
-                        (Registers.CoreStatus & 1 << 7) !=
-                        (Registers.CoreStatus & 1 << 5);
+                    return az | av != an;
                 case ConditionCode.FloatEqual:
                     // BZ
-                    return (Registers.CoreStatus & 1 << 8) == 1;
+                    return bz;
                 case ConditionCode.FloatNotEqual:
                     // ~BZ
-                    return (Registers.CoreStatus & 1 << 8) == 0;
+                    return !bz;
                 case ConditionCode.FloatLessThan:
                     // BN & ~BZ
-                    return (Registers.CoreStatus & 1 << 9) == 1 &&
-                        (Registers.CoreStatus & 1 << 8) == 0;
+                    return bn & !bz;
                 case ConditionCode.FloatLessThanOrEqual:
                     // BN | BZ
-                    return (Registers.CoreStatus & 1 << 9) == 1 ||
-                        (Registers.CoreStatus & 1 << 8) == 1;
+                    return bn | bz;
                 case ConditionCode.Unconditional:
                 case ConditionCode.BranchAndLink:
                     return true;

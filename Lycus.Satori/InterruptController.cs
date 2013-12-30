@@ -17,32 +17,32 @@ namespace Lycus.Satori
 
         internal bool Update()
         {
+            var status = Core.Registers.CoreStatus;
+
             // Are interrupts disabled entirely?
-            if ((Core.Registers.CoreStatus & 1 << 1) == 1)
+            if (Bits.Check(status, 1))
                 return false;
+
+            var ilat = Core.Registers.InterruptLatch;
+            var ipend = Core.Registers.InterruptsPending;
 
             lock (_lock)
             {
                 for (var i = 0; i < 9; i++)
                 {
                     // Is the latch bit set?
-                    if ((Core.Registers.InterruptLatch & 1 << i) == 0)
+                    if (!Bits.Check(ilat, i))
                         continue;
 
                     // Are we masked?
-                    if ((Core.Registers.InterruptMask & 1 << i) == 1)
+                    if (Bits.Check(Core.Registers.InterruptMask, i))
                         continue;
-
-                    uint pend = 0;
-
-                    for (var j = 0; j <= i; j++)
-                        pend |= Core.Registers.InterruptsPending & 1u << j;
 
                     // Are any higher-priority interrupts already being
                     // handled? For example, if we get a timer interrupt
                     // while a `SYNC` interrupt is being handled, we need
                     // to ignore the timer interrupt as it's lower priority.
-                    if (pend != 0)
+                    if (Bits.Extract(ipend, 0, i - 1) != 0)
                         continue;
 
                     Current = (Interrupt)i;
@@ -57,13 +57,15 @@ namespace Lycus.Satori
                     // 6. Branch to the IVT entry.
 
                     Core.Registers.InterruptReturn = Core.Registers.ProgramCounter;
-                    Core.Registers.InterruptLatch &= ~(1u << i);
-                    Core.Registers.InterruptsPending |= 1u << i;
-                    Core.Registers.CoreStatus |= 1 << 1;
+                    Core.Registers.InterruptLatch = Bits.Clear(ilat, i);
+                    Core.Registers.InterruptsPending = Bits.Set(ipend, i);
 
-                    if ((Core.Registers.CoreConfig & 1 << 25) == 1)
-                        Core.Registers.CoreStatus |= 1 << 2;
+                    status = Bits.Set(status, 1);
 
+                    if (Bits.Check(Core.Registers.CoreConfig, 25))
+                        status = Bits.Set(status, 2);
+
+                    Core.Registers.CoreStatus = status;
                     Core.Registers.ProgramCounter = (uint)(Memory.InterruptVectorAddress + i * sizeof(uint));
 
                     return true;
@@ -134,10 +136,10 @@ namespace Lycus.Satori
 
             lock (_lock)
             {
-                Core.Registers.InterruptLatch |= 1u << (int)priority;
+                Core.Registers.InterruptLatch = Bits.Set(Core.Registers.InterruptLatch, (int)priority);
 
                 if (cause != ExceptionCause.None)
-                    Core.Registers.CoreStatus |= (uint)(exCause & ~0xFFFFFFF0);
+                    Core.Registers.CoreStatus = Bits.Insert(Core.Registers.CoreStatus, (uint)exCause, 16, 4);
             }
         }
     }

@@ -35,19 +35,19 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            Condition = (ConditionCode)((Value & ~0xFFFFFF0F) >> 4);
+            Condition = (ConditionCode)Bits.Extract(Value, 4, 4);
 
             if (Condition == ConditionCode.BranchAndLink)
                 throw InstructionException();
 
-            SourceRegister = (int)((Value & ~0xFFFFE3FF) >> 10);
-            DestinationRegister = (int)((Value & ~0xFFFF1FFF) >> 13);
+            SourceRegister = (int)Bits.Extract(Value, 10, 3);
+            DestinationRegister = (int)Bits.Extract(Value, 13, 3);
 
             if (Is16Bit)
                 return;
 
-            SourceRegister |= (int)((Value & ~0xE3FFFFFF) >> 26 << 3);
-            DestinationRegister |= (int)((Value & ~0x1FFFFFF) >> 29 << 3);
+            SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
+            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
         }
 
         public override Operation Execute(Core core)

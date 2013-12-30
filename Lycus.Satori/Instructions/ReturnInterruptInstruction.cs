@@ -25,15 +25,21 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            if (core.Interrupts.Current != null)
+            var cur = core.Interrupts.Current;
+
+            if (cur != null)
             {
-                core.Registers.InterruptsPending &= ~(1u << (int)core.Interrupts.Current);
+                core.Registers.InterruptsPending = Bits.Clear(core.Registers.InterruptsPending, (int)cur);
 
                 core.Interrupts.Current = null;
             }
 
-            core.Registers.CoreStatus &= ~(1u << 1); // Enable interrupts.
-            core.Registers.CoreStatus &= ~(1u << 2); // Back to user mode.
+            var status = core.Registers.CoreStatus;
+
+            status = Bits.Clear(status, 1); // Enable interrupts.
+            status = Bits.Clear(status, 2); // Back to user mode.
+
+            core.Registers.CoreStatus = status;
             core.Registers.ProgramCounter = core.Registers.InterruptReturn;
 
             return Operation.None;

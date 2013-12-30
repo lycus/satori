@@ -26,8 +26,8 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            Condition = (ConditionCode)((Value & ~0xFFFFFF0F) >> 4);
-            Immediate = (int)((Value & ~(Is16Bit ? 0xFFFF00FF : 0x000000FF)) >> 8);
+            Condition = (ConditionCode)Bits.Extract(Value, 4, 4);
+            Immediate = (int)Bits.Extract(Value, 8, Is16Bit ? 8 : 24);
         }
 
         public override Operation Execute(Core core)

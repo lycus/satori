@@ -27,12 +27,12 @@ namespace Lycus.Satori.Instructions
                 throw new ArgumentNullException("core");
 
             // Flip the `WAND` bit on.
-            core.Registers.CoreStatus |= (1 << 3);
+            core.Registers.CoreStatus = Bits.Set(core.Registers.CoreStatus, 3);
 
             // Check if all cores have the bit set. There is no need for
             // locking here, as the assumption is that cores will only
             // clear the bit in the ISR, which we trigger below.
-            var flag = core.Machine.Cores.All(c => (c.Registers.CoreStatus & 1 << 3) != 0);
+            var flag = core.Machine.Cores.All(c => Bits.Check(core.Registers.CoreStatus, 3));
 
             if (!flag)
                 return Operation.Next;

@@ -62,24 +62,6 @@ namespace Lycus.Satori
             return *(ulong*)&value;
         }
 
-        public static BitArray ToBitArray(this short bits)
-        {
-            var arr = new BitArray(sizeof(short) * 8);
-
-            // Apparently `BitArray` only speaks 32-bit integers for some
-            // incredibly silly reason.
-            for (var i = 0; i < sizeof(short) * 8; i++)
-                arr[i] = (bits & 1 << i) != 0;
-
-            return arr;
-        }
-
-        [CLSCompliant(false)]
-        public static BitArray ToBitArray(this ushort bits)
-        {
-            return ((short)bits).ToBitArray();
-        }
-
         public static BitArray ToBitArray(this int bits)
         {
             return new BitArray(new[] { bits });

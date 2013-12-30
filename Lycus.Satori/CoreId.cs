@@ -47,17 +47,24 @@ namespace Lycus.Satori
         [CLSCompliant(false)]
         public static CoreId FromAddress(uint address, out uint raw)
         {
-            raw = address & ~0xFFF00000;
+            raw = Bits.Extract(address, 0, 20);
 
-            var id = address >> 20;
+            var id = Bits.Extract(address, 20, 12);
+            var row = Bits.Extract(id, 6, 6);
+            var col = Bits.Extract(id, 0, 6);
 
-            return new CoreId((int)(id >> 6), (int)(id & 63));
+            return new CoreId((int)row, (int)col);
         }
 
         [CLSCompliant(false)]
         public uint ToAddress(uint raw = 0)
         {
-            return raw | ((uint)Row << 26) | ((uint)Column << 20);
+            var value = raw;
+
+            value = Bits.Insert(value, (uint)Row, 26, 6);
+            value = Bits.Insert(value, (uint)Column, 20, 6);
+
+            return value;
         }
 
         public override bool Equals(object obj)

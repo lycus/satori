@@ -179,9 +179,9 @@ namespace Lycus.Satori.EExec
 
             // Set all cores to active.
             foreach (var core in cores)
-                core.Registers.CoreStatus |= 1 << 0;
+                core.Registers.CoreStatus = Bits.Set(core.Registers.CoreStatus, 0);
 
-            while (cores.Any(x => (x.Registers.CoreStatus & 1 << 0) == 1))
+            while (cores.Any(x => Bits.Check(x.Registers.CoreStatus, 0)))
                 Thread.Sleep(10);
 
             return cores.Any(x => x.TestFailed) ? 1 : 0;

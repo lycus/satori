@@ -27,14 +27,14 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            DestinationRegister = (int)((Value & ~0xFFFF1FFF) >> 13);
-            Immediate = (Value & ~0xFFFFE01F) >> 5;
+            DestinationRegister = (int)Bits.Extract(Value, 13, 3);
+            Immediate = Bits.Extract(Value, 5, 8);
 
             if (Is16Bit)
                 return;
 
-            DestinationRegister |= (int)((Value & ~0x1FFFFFFF) >> 29 << 3);
-            Immediate |= (Value & ~0xF00FFFFF) >> 20 << 8;
+            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            Immediate |= Bits.Extract(Value, 20, 8) << 8;
         }
 
         public override Operation Execute(Core core)

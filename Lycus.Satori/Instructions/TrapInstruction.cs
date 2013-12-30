@@ -24,7 +24,7 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            Code = (int)((Value & ~0xFFFF03FF) >> 10);
+            Code = (int)Bits.Extract(Value, 10, 6);
         }
 
         public override Operation Execute(Core core)
@@ -61,7 +61,7 @@ namespace Lycus.Satori.Instructions
                         break;
                 }
 
-                core.Registers.CoreStatus &= ~(1u << 0);
+                core.Registers.CoreStatus = Bits.Clear(core.Registers.CoreStatus, 0);
             }
 
             return Operation.Next;
