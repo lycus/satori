@@ -59,7 +59,15 @@ namespace Lycus.Satori.Kernels
 
                 foreach (var stream in _files.Values)
                 {
-                    stream.Flush();
+                    try
+                    {
+                        stream.Flush();
+                    }
+                    catch (NotSupportedException)
+                    {
+                        // Console streams can't be flushed on Windows.
+                    }
+
                     stream.Dispose();
                 }
             }
