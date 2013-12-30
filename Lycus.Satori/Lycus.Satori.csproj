@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>0078,1591</NoWarn>
     <LangVersion>5</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RunCodeAnalysis>true</RunCodeAnalysis>
@@ -37,7 +37,7 @@
     <LangVersion>5</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>0078,1591</NoWarn>
     <DocumentationFile>bin\Release\Lycus.Satori.xml</DocumentationFile>
     <CodeAnalysisRuleSet>..\Lycus.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>

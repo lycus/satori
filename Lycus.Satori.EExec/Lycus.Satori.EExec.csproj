@@ -42,7 +42,7 @@
     <LangVersion>5</LangVersion>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Lycus.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>0078,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,7 +58,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>..\Lycus.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>0078,1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Lycus.Satori.EExec.Program</StartupObject>
