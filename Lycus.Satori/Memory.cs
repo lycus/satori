@@ -232,7 +232,7 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            Write(writer, address, value.ReinterpretAsUInt32());
+            Write(writer, address, value.CoerceToUInt32());
         }
 
         [CLSCompliant(false)]
@@ -241,7 +241,7 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            Write(writer, address, value.ReinterpretAsUInt64());
+            Write(writer, address, value.CoerceToUInt64());
         }
 
         [CLSCompliant(false)]
@@ -351,7 +351,7 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
-            return ReadUInt32(reader, address).ReinterpretAsSingle();
+            return ReadUInt32(reader, address).CoerceToSingle();
         }
 
         [CLSCompliant(false)]
@@ -360,7 +360,7 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
-            return ReadUInt64(reader, address).ReinterpretAsDouble();
+            return ReadUInt64(reader, address).CoerceToDouble();
         }
 
         [CLSCompliant(false)]

@@ -54,7 +54,7 @@ namespace Lycus.Satori.Instructions
             if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x4)
                 result = src1 - src1 * src3;
             else
-                result = (src1.ReinterpretAsSingle() - src2.ReinterpretAsSingle() * src3.ReinterpretAsSingle()).ReinterpretAsInt32();
+                result = (src1.CoerceToSingle() - src2.CoerceToSingle() * src3.CoerceToSingle()).CoerceToInt32();
 
             core.Registers[DestinationRegister] = result;
 

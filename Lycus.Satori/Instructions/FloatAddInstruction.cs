@@ -53,7 +53,7 @@ namespace Lycus.Satori.Instructions
             if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x4)
                 result = lhs + rhs;
             else
-                result = (lhs.ReinterpretAsSingle() + rhs.ReinterpretAsSingle()).ReinterpretAsInt32();
+                result = (lhs.CoerceToSingle() + rhs.CoerceToSingle()).CoerceToInt32();
 
             core.Registers[DestinationRegister] = result;
 

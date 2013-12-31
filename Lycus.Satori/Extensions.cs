@@ -18,46 +18,46 @@ namespace Lycus.Satori
             return string.Format(CultureInfo.InvariantCulture, format, args);
         }
 
-        public static float ReinterpretAsSingle(this int value)
+        public static float CoerceToSingle(this int value)
         {
-            return ((uint)value).ReinterpretAsSingle();
+            return ((uint)value).CoerceToSingle();
         }
 
         [CLSCompliant(false)]
-        public static unsafe float ReinterpretAsSingle(this uint value)
+        public static unsafe float CoerceToSingle(this uint value)
         {
             return *(float*)&value;
         }
 
-        public static double ReinterpretAsDouble(this long value)
+        public static double CoerceToDouble(this long value)
         {
-            return ((ulong)value).ReinterpretAsDouble();
+            return ((ulong)value).CoerceToDouble();
         }
 
         [CLSCompliant(false)]
-        public static unsafe double ReinterpretAsDouble(this ulong value)
+        public static unsafe double CoerceToDouble(this ulong value)
         {
             return *(double*)&value;
         }
 
-        public static int ReinterpretAsInt32(this float value)
+        public static int CoerceToInt32(this float value)
         {
-            return (int)value.ReinterpretAsUInt32();
+            return (int)value.CoerceToUInt32();
         }
 
         [CLSCompliant(false)]
-        public static unsafe uint ReinterpretAsUInt32(this float value)
+        public static unsafe uint CoerceToUInt32(this float value)
         {
             return *(uint*)&value;
         }
 
-        public static long ReinterpretAsInt64(this double value)
+        public static long CoerceToInt64(this double value)
         {
-            return (long)value.ReinterpretAsUInt64();
+            return (long)value.CoerceToUInt64();
         }
 
         [CLSCompliant(false)]
-        public static unsafe ulong ReinterpretAsUInt64(this double value)
+        public static unsafe ulong CoerceToUInt64(this double value)
         {
             return *(ulong*)&value;
         }

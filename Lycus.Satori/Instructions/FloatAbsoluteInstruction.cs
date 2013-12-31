@@ -42,7 +42,7 @@ namespace Lycus.Satori.Instructions
                 throw new ArgumentNullException("core");
 
             core.Registers[DestinationRegister] =
-                Math.Abs(core.Registers[SourceRegister].ReinterpretAsSingle()).ReinterpretAsInt32();
+                Math.Abs(core.Registers[SourceRegister].CoerceToSingle()).CoerceToInt32();
 
             return Operation.Next;
         }
