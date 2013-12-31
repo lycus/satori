@@ -155,5 +155,45 @@ namespace Lycus.Satori
                         "condition");
             }
         }
+
+        public static int ExtractMantissa(this float value)
+        {
+            return Bits.Extract(value.CoerceToInt32(), 0, 22);
+        }
+
+        public static int ExtractExponent(this float value)
+        {
+            return Bits.Extract(value.CoerceToInt32(), 22, 8);
+        }
+
+        public static bool ExtractSign(this float value)
+        {
+            return Bits.Check(value.CoerceToInt32(), 31);
+        }
+
+        public static bool IsDenormal(this float value)
+        {
+            return value.ExtractExponent() == 0 && value.ExtractMantissa() != 0;
+        }
+
+        public static bool IsNegative(this float value)
+        {
+            return Bits.Check(value.CoerceToInt32(), 31);
+        }
+
+        public static float ToPositive(this float value)
+        {
+            return Bits.Clear(value.CoerceToInt32(), 31).CoerceToSingle();
+        }
+
+        public static float ToNegative(this float value)
+        {
+            return Bits.Set(value.CoerceToInt32(), 31).CoerceToSingle();
+        }
+
+        public static float ToZero(this float value)
+        {
+            return Bits.Insert(value.CoerceToInt32(), 0, 0, 31);
+        }
     }
 }
