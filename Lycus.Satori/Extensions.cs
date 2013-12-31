@@ -193,7 +193,7 @@ namespace Lycus.Satori
 
         public static float ToZero(this float value)
         {
-            return Bits.Insert(value.CoerceToInt32(), 0, 0, 31);
+            return Bits.Insert(value.CoerceToInt32(), 0, 0, 31).CoerceToSingle();
         }
     }
 }
