@@ -45,6 +45,18 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
+            var lhs = core.Registers[SourceRegister];
+            var rhs = core.Registers[OperandRegister];
+
+            int result;
+
+            if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x4)
+                result = lhs - rhs;
+            else
+                result = (lhs.ReinterpretAsSingle() - rhs.ReinterpretAsSingle()).ReinterpretAsInt32();
+
+            core.Registers[DestinationRegister] = result;
+
             return Operation.Next;
         }
     }
