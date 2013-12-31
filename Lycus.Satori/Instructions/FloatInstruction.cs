@@ -41,6 +41,9 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
+            core.Registers[DestinationRegister] =
+                ((float)core.Registers[SourceRegister]).CoerceToInt32();
+
             return Operation.Next;
         }
     }
