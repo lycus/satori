@@ -36,10 +36,6 @@ namespace Lycus.Satori.Instructions
         public override void Decode()
         {
             Condition = (ConditionCode)Bits.Extract(Value, 4, 4);
-
-            if (Condition == ConditionCode.BranchAndLink)
-                throw InstructionException();
-
             SourceRegister = (int)Bits.Extract(Value, 10, 3);
             DestinationRegister = (int)Bits.Extract(Value, 13, 3);
 
@@ -48,6 +44,9 @@ namespace Lycus.Satori.Instructions
 
             SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
             DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+
+            if (Condition == ConditionCode.BranchAndLink)
+                throw InstructionException();
         }
 
         public override Operation Execute(Core core)
