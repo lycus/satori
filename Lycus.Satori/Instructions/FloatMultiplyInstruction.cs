@@ -45,17 +45,40 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            var lhs = core.Registers[SourceRegister];
-            var rhs = core.Registers[OperandRegister];
+            var lhs = core.Registers[SourceRegister].CoerceToSingle();
+            var rhs = core.Registers[OperandRegister].CoerceToSingle();
 
-            int result;
+            float result;
 
-            if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x4)
-                result = lhs * rhs;
+            if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x0)
+            {
+                if (float.IsNaN(lhs) || float.IsNaN(rhs))
+                {
+                    // `float.NaN` is a quiet NaN.
+                    var nan = float.NaN.CoerceToInt32();
+                    var sign = Bits.Check(lhs.CoerceToInt32(), 31) ^
+                        Bits.Check(rhs.CoerceToInt32(), 31);
+
+                    result = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
+                }
+                else
+                {
+                    if (lhs.IsDenormal())
+                        lhs = lhs.ToZero();
+
+                    if (rhs.IsDenormal())
+                        rhs = rhs.ToZero();
+
+                    result = lhs * rhs;
+
+                    if (result.IsDenormal())
+                        result = result.ToZero();
+                }
+            }
             else
-                result = (lhs.CoerceToSingle() * rhs.CoerceToSingle()).CoerceToInt32();
+                result = (lhs.CoerceToInt32() * lhs.CoerceToInt32()).CoerceToSingle();
 
-            core.Registers[DestinationRegister] = result;
+            core.Registers[DestinationRegister] = result.CoerceToInt32();
 
             return Operation.Next;
         }
