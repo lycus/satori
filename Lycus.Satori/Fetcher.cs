@@ -166,9 +166,9 @@ namespace Lycus.Satori
                     return new LoadDisplacementInstruction(value, true);
                 case 0x00000005:
                     if (Bits.Check(value, 4))
-                        return new StoreDisplacementPostModifyInstruction(value, true);
+                        return new StorePostModifyImmediateInstruction(value, true);
 
-                    return new LoadDisplacementPostModifyInstruction(value, true);
+                    return new LoadPostModifyImmediateInstruction(value, true);
                 case 0x00000006:
                     if (Bits.Check(value, 4))
                         return new LogicalShiftLeftImmediateInstruction(value, true);
@@ -304,9 +304,9 @@ namespace Lycus.Satori
                     if (Bits.Check(value, 25))
                     {
                         if (Bits.Check(value, 4))
-                            return new StoreDisplacementPostModifyInstruction(value, false);
+                            return new StorePostModifyImmediateInstruction(value, false);
 
-                        return new LoadDisplacementPostModifyInstruction(value, false);
+                        return new LoadPostModifyImmediateInstruction(value, false);
                     }
 
                     if (Bits.Check(value, 4))

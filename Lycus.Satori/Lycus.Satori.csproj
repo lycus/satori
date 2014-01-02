@@ -91,7 +91,7 @@
     <Compile Include="Instructions\JumpInstruction.cs" />
     <Compile Include="Instructions\JumpLinkInstruction.cs" />
     <Compile Include="Instructions\LoadDisplacementInstruction.cs" />
-    <Compile Include="Instructions\LoadDisplacementPostModifyInstruction.cs" />
+    <Compile Include="Instructions\LoadPostModifyImmediateInstruction.cs" />
     <Compile Include="Instructions\LoadIndexInstruction.cs" />
     <Compile Include="Instructions\LoadPostModifyInstruction.cs" />
     <Compile Include="Instructions\LogicalShiftLeftImmediateInstruction.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="Instructions\OrInstruction.cs" />
     <Compile Include="Instructions\ReturnInterruptInstruction.cs" />
     <Compile Include="Instructions\StoreDisplacementInstruction.cs" />
-    <Compile Include="Instructions\StoreDisplacementPostModifyInstruction.cs" />
+    <Compile Include="Instructions\StorePostModifyImmediateInstruction.cs" />
     <Compile Include="Instructions\StoreIndexInstruction.cs" />
     <Compile Include="Instructions\StorePostModifyInstruction.cs" />
     <Compile Include="Instructions\SubtractImmediateInstruction.cs" />

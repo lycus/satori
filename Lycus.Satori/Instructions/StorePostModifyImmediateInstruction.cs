@@ -2,20 +2,20 @@
 
 namespace Lycus.Satori.Instructions
 {
-    public sealed class LoadDisplacementPostModifyInstruction : Instruction
+    public sealed class StorePostModifyImmediateInstruction : Instruction
     {
         public override string Mnemonic
         {
-            get { return "ldr"; }
+            get { return "str"; }
         }
-        
-        public LoadDisplacementPostModifyInstruction(bool is16Bit)
+
+        public StorePostModifyImmediateInstruction(bool is16Bit)
             : this(0, is16Bit)
         {
         }
 
         [CLSCompliant(false)]
-        public LoadDisplacementPostModifyInstruction(uint value, bool is16Bit)
+        public StorePostModifyImmediateInstruction(uint value, bool is16Bit)
             : base(value, is16Bit)
         {
         }
@@ -33,20 +33,20 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            SourceRegister = (int)Bits.Extract(Value, 10, 3);
-            DestinationRegister = (int)Bits.Extract(Value, 13, 3);
+            SourceRegister = (int)Bits.Extract(Value, 13, 3);
+            DestinationRegister = (int)Bits.Extract(Value, 10, 3);
             Immediate = Bits.Extract(Value, 7, 3);
             Size = (int)Bits.Extract(Value, 5, 2);
 
             if (Is16Bit)
                 return;
 
-            SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
-            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            SourceRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            DestinationRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
             Immediate |= Bits.Extract(Value, 16, 8) << 8;
             Subtract = Bits.Check(Value, 24);
 
-            if (Size == 0x3 && SourceRegister % 2 != 0)
+            if (Size == 0x3 && DestinationRegister % 2 != 0)
                 throw InstructionException();
         }
 
