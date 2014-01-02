@@ -52,9 +52,20 @@ namespace Lycus.Satori.Instructions
             core.Machine.Memory.Translate(core, addr,
                 out tgt, out bank, out @lock);
 
+            // Atomic instructions are only supported on the local memory in
+            // the Epiphany cores. In other words, no external memory.
             if (tgt == null)
                 throw new MemoryException(
                     "Attempted external TESTSET at 0x{0:X8}.".Interpolate(addr),
+                    addr, false);
+
+            // This is a bit of a silly restriction in the architecture. If
+            // a core wants to `TESTSET` on a location within its local memory,
+            // it has to compute the global address of that location and use
+            // that with the `TESTSET`.
+            if (tgt == core)
+                throw new MemoryException(
+                    "Attempted local TESTSET at 0x{0:X8}.".Interpolate(addr),
                     addr, false);
 
             int value;
