@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Lycus.Satori
 {
@@ -56,24 +57,42 @@ namespace Lycus.Satori
 
         public int Size { get; private set; }
 
-        readonly byte[] _external;
+        /// <summary>
+        /// The global memory lock.
+        ///
+        /// This is used when memory accesses to external memory
+        /// happen. Callers can lock on this object to perform
+        /// atomic operations on external memory.
+        /// </summary>
+        public object Lock { get; private set; }
 
-        readonly object _lock = new object();
+        readonly byte[] _external;
 
         internal Memory(Machine machine, int size)
         {
             Machine = machine;
             Size = size;
+            Lock = new object();
             _external = new byte[size];
         }
 
-        uint Translate(Core core, uint address, bool? write, out byte[] memory, out Core target)
+        [CLSCompliant(false)]
+        public uint Translate(Core core, uint address,
+            out Core target, out byte[] memory, out object @lock)
+        {
+            return Translate(core, address, null,
+                out target, out memory, out @lock);
+        }
+
+        uint Translate(Core core, uint address, bool? write,
+            out Core target, out byte[] memory, out object @lock)
         {
             // Is it in external memory?
             if (address >= ExternalBaseAddress && address < ExternalBaseAddress + Size)
             {
-                memory = _external;
                 target = null;
+                memory = _external;
+                @lock = Lock;
 
                 return address - ExternalBaseAddress;
             }
@@ -84,11 +103,20 @@ namespace Lycus.Satori
 
             // These ranges are reserved for future expansion of
             // local core memory by Adapteva.
-            if ((raw >= Reserved0Address && raw < RegisterFileAddress ||
-                raw >= Reserved1Address && raw < 0x10000) && write != null)
-                throw new MemoryException(
-                    "Reserved memory access at 0x{0:X8}.".Interpolate(address),
-                    address, (bool)write);
+            if (raw >= Reserved0Address && raw < RegisterFileAddress ||
+                raw >= Reserved1Address && raw < 0x10000)
+            {
+                if (write != null)
+                    throw new MemoryException(
+                        "Reserved memory access at 0x{0:X8}.".Interpolate(address),
+                        address, (bool)write);
+
+                target = null;
+                memory = null;
+                @lock = null;
+
+                return uint.MaxValue;
+            }
 
             if (id != CoreId.Current)
                 core = Machine.GetCore(id);
@@ -96,8 +124,9 @@ namespace Lycus.Satori
             // Is it local core memory?
             if (raw < LocalMemorySize && core != null)
             {
-                memory = core.Memory;
                 target = core;
+                memory = core.Memory;
+                @lock = core.Lock;
 
                 return raw;
             }
@@ -112,45 +141,44 @@ namespace Lycus.Satori
                     "Invalid memory access at 0x{0:X8}.".Interpolate(address),
                     address, (bool)write);
 
-            memory = null;
             target = null;
+            memory = null;
+            @lock = null;
 
             return address;
         }
 
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
         {
-            byte[] mem;
             Core tgt;
+            byte[] mem;
+            object @lock;
 
-            var idx = Translate(writer, address, true, out mem, out tgt);
+            var idx = Translate(writer, address, true, out tgt, out mem, out @lock);
 
             if (idx + size >= mem.Length)
                 throw new MemoryException(
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, true);
 
-            var lockObj = tgt != null ? tgt.MemoryLock : _lock;
-
-            lock (lockObj)
+            lock (@lock)
                 Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
         }
 
         unsafe void RawRead(Core reader, uint address, void* data, int size)
         {
-            byte[] mem;
             Core tgt;
+            byte[] mem;
+            object @lock;
 
-            var idx = Translate(reader, address, false, out mem, out tgt);
+            var idx = Translate(reader, address, false, out tgt, out mem, out @lock);
 
             if (idx + size >= mem.Length)
                 throw new MemoryException(
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
 
-            var lockObj = tgt != null ? tgt.MemoryLock : _lock;
-
-            lock (lockObj)
+            lock (@lock)
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
         }
 

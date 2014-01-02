@@ -42,7 +42,14 @@ namespace Lycus.Satori
 
         internal byte[] Memory { get; private set; }
 
-        internal object MemoryLock { get; private set; }
+        /// <summary>
+        /// The local memory lock.
+        ///
+        /// This is used when memory accesses to this core's
+        /// memory happen. Callers can lock on this object to
+        /// perform atomic operations on core memory.
+        /// </summary>
+        public object Lock { get; private set; }
 
         internal Task MainTask { get; private set; }
 
@@ -125,7 +132,7 @@ namespace Lycus.Satori
             DirectAccess = new DirectAccessEngine(this);
             Debugger = new DebugUnit(this);
             Memory = new byte[Satori.Memory.LocalMemorySize];
-            MemoryLock = new object();
+            Lock = new object();
             MainTask = Task.Run(async () => await CoreLoop());
         }
 
