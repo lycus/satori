@@ -9,12 +9,12 @@ namespace Lycus.Satori
         [CLSCompliant(false)]
         public const uint InterruptVectorAddress = 0x00000000;
 
-        public const int InterruptVectorSize = 4 * 16;
+        public const int InterruptVectorSize = sizeof(uint) * 16;
 
         [CLSCompliant(false)]
         public const uint LocalBank0Address = 0x00000040;
 
-        public const int LocalBank0Size = 8 * 1024 - 4 * 16;
+        public const int LocalBank0Size = 8 * 1024 - sizeof(uint) * 16;
 
         [CLSCompliant(false)]
         public const uint LocalBank1Address = 0x00002000;
@@ -34,15 +34,17 @@ namespace Lycus.Satori
         [CLSCompliant(false)]
         public const uint Reserved0Address = 0x00008000;
 
-        public const int Reserved0Size = 0;
+        public const int Reserved0Size = 928 * 1024;
 
         [CLSCompliant(false)]
         public const uint RegisterFileAddress = 0x000F0000;
 
+        public const int RegisterFileSize = 2 * 1024;
+
         [CLSCompliant(false)]
         public const uint Reserved1Address = 0x000F0800;
 
-        public const int Reserved1Size = 0;
+        public const int Reserved1Size = 62 * 1024;
 
         public const int LocalMemorySize = 1024 * 1024;
 
