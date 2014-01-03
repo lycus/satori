@@ -187,9 +187,8 @@ namespace Lycus.Satori
         static void CheckAlignment(uint address, int size, bool write)
         {
             if (address % size != 0)
-                throw new MemoryException(
-                    "Unaligned memory access of size {0} at 0x{1:X8}.".Interpolate(size, address),
-                    address, write);
+                throw new DataMisalignedException(
+                    "Unaligned memory access of size {0} at 0x{1:X8}.".Interpolate(size, address));
         }
 
         [CLSCompliant(false)]
