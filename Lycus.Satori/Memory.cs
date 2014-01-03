@@ -184,6 +184,14 @@ namespace Lycus.Satori
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
         }
 
+        static void CheckAlignment(uint address, int size, bool write)
+        {
+            if (address % size != 0)
+                throw new MemoryException(
+                    "Unaligned memory access of size {0} at 0x{1:X8}.".Interpolate(size, address),
+                    address, write);
+        }
+
         [CLSCompliant(false)]
         public void Write(Core writer, uint address, sbyte value)
         {
@@ -208,6 +216,8 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
+            CheckAlignment(address, sizeof(short), true);
+
             Write(writer, address, (ushort)value);
         }
 
@@ -216,6 +226,8 @@ namespace Lycus.Satori
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+
+            CheckAlignment(address, sizeof(ushort), true);
 
             RawWrite(writer, address, &value, sizeof(ushort));
         }
@@ -226,6 +238,8 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
+            CheckAlignment(address, sizeof(int), true);
+
             Write(writer, address, (uint)value);
         }
 
@@ -234,6 +248,8 @@ namespace Lycus.Satori
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+
+            CheckAlignment(address, sizeof(uint), true);
 
             RawWrite(writer, address, &value, sizeof(uint));
         }
@@ -244,6 +260,8 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
+            CheckAlignment(address, sizeof(long), true);
+
             Write(writer, address, (ulong)value);
         }
 
@@ -252,6 +270,8 @@ namespace Lycus.Satori
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+
+            CheckAlignment(address, sizeof(ulong), true);
 
             RawWrite(writer, address, &value, sizeof(ulong));
         }
@@ -262,6 +282,8 @@ namespace Lycus.Satori
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
+            CheckAlignment(address, sizeof(float), true);
+
             Write(writer, address, value.CoerceToUInt32());
         }
 
@@ -270,6 +292,8 @@ namespace Lycus.Satori
         {
             if (writer == null)
                 throw new ArgumentNullException("writer");
+
+            CheckAlignment(address, sizeof(double), true);
 
             Write(writer, address, value.CoerceToUInt64());
         }
@@ -315,6 +339,8 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
+            CheckAlignment(address, sizeof(short), false);
+
             return (short)ReadUInt16(reader, address);
         }
 
@@ -323,6 +349,8 @@ namespace Lycus.Satori
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
+
+            CheckAlignment(address, sizeof(ushort), false);
 
             ushort result;
 
@@ -337,6 +365,8 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
+            CheckAlignment(address, sizeof(int), false);
+
             return (int)ReadUInt32(reader, address);
         }
 
@@ -345,6 +375,8 @@ namespace Lycus.Satori
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
+
+            CheckAlignment(address, sizeof(uint), false);
 
             uint result;
 
@@ -359,6 +391,8 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
+            CheckAlignment(address, sizeof(long), false);
+
             return (long)ReadUInt64(reader, address);
         }
 
@@ -367,6 +401,8 @@ namespace Lycus.Satori
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
+
+            CheckAlignment(address, sizeof(ulong), false);
 
             ulong result;
 
@@ -381,6 +417,8 @@ namespace Lycus.Satori
             if (reader == null)
                 throw new ArgumentNullException("reader");
 
+            CheckAlignment(address, sizeof(float), false);
+
             return ReadUInt32(reader, address).CoerceToSingle();
         }
 
@@ -389,6 +427,8 @@ namespace Lycus.Satori
         {
             if (reader == null)
                 throw new ArgumentNullException("reader");
+
+            CheckAlignment(address, sizeof(double), false);
 
             return ReadUInt64(reader, address).CoerceToDouble();
         }
@@ -400,8 +440,7 @@ namespace Lycus.Satori
                 throw new ArgumentNullException("reader");
 
             if (count < 0)
-                throw new ArgumentOutOfRangeException(
-                    "count",
+                throw new ArgumentOutOfRangeException("count",
                     "Byte count is negative.");
 
             var data = new byte[count];
