@@ -194,11 +194,21 @@ namespace Lycus.Satori
                     continue;
                 }
 
+                var pc = Registers.ProgramCounter;
+
+                // If the address in `PC` isn't aligned on a 2-byte boundary
+                // undefined behavior results, so halt.
+                if (pc % sizeof(ushort) != 0)
+                {
+                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+
+                    continue;
+                }
+
                 Instruction insn;
 
                 try
                 {
-                    var pc = Registers.ProgramCounter;
 
                     Machine.Logger.TraceCore(this, "PC = 0x{0:X8}", pc);
 
