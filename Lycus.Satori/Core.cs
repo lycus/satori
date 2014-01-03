@@ -285,6 +285,16 @@ namespace Lycus.Satori
 
                     continue;
                 }
+                catch (DataMisalignedException)
+                {
+                    // We're not required to finish any memory transaction
+                    // if a memory access is unaligned, so just deliver the
+                    // interrupt and move on.
+                    Interrupts.Trigger(Interrupt.SoftwareException,
+                        ExceptionCause.UnalignedAccess);
+
+                    continue;
+                }
 
                 if (insn.IsTimed)
                     Timer.IncrementInstructions(isInt);
