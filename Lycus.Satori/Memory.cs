@@ -149,6 +149,29 @@ namespace Lycus.Satori
             return address;
         }
 
+        void CheckRegisterAccess(byte[] bank, uint address,
+            uint index, int size, bool write)
+        {
+            if (bank == _external)
+                return;
+
+            if (index < RegisterFileAddress || index >= RegisterFileSize)
+                return;
+
+            if (address % sizeof(uint) != 0)
+                throw new MemoryException(
+                    "Unaligned register access at 0x{1:X8}.".Interpolate(address),
+                    address, write);
+
+            if (size != sizeof(uint))
+                throw new MemoryException(
+                    "Invalid register size {0} at 0x{1:X8}.".Interpolate(size, address),
+                    address, write);
+
+            // TODO: Check reads/writes to WR/RD registers and
+            // reserved register areas.
+        }
+
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
         {
             Core tgt;
@@ -161,6 +184,8 @@ namespace Lycus.Satori
                 throw new MemoryException(
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, true);
+
+            CheckRegisterAccess(mem, address, idx, size, true);
 
             lock (@lock)
                 Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
@@ -178,6 +203,8 @@ namespace Lycus.Satori
                 throw new MemoryException(
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
+
+            CheckRegisterAccess(mem, address, idx, size, false);
 
             lock (@lock)
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
