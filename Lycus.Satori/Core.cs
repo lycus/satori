@@ -285,11 +285,9 @@ namespace Lycus.Satori
 
                     continue;
                 }
-                finally
-                {
-                    if (insn.IsTimed)
-                        Timer.IncrementInstructions(isInt);
-                }
+
+                if (insn.IsTimed)
+                    Timer.IncrementInstructions(isInt);
 
                 var vevt = ValidInstruction;
 
