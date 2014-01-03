@@ -107,6 +107,7 @@
     <Compile Include="Instructions\NoOperationInstruction.cs" />
     <Compile Include="Instructions\OrInstruction.cs" />
     <Compile Include="Instructions\ReturnInterruptInstruction.cs" />
+    <Compile Include="Instructions\SoftwareInterruptInstruction.cs" />
     <Compile Include="Instructions\StoreDisplacementInstruction.cs" />
     <Compile Include="Instructions\StorePostModifyImmediateInstruction.cs" />
     <Compile Include="Instructions\StoreIndexInstruction.cs" />

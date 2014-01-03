@@ -130,6 +130,8 @@ namespace Lycus.Satori
                             return new BreakpointInstruction(value);
                         case 0x0000001D:
                             return new ReturnInterruptInstruction(value);
+                        case 0x0000001E:
+                            return new SoftwareInterruptInstruction(value);
                         case 0x0000001F:
                             return new SynchronizeInstruction(value);
                         case 0x00000039:
