@@ -73,6 +73,17 @@ namespace Lycus.Satori
         public event EventHandler<TickEventArgs> Tick;
 
         /// <summary>
+        /// Fires if the core encounters an invalid value in the
+        /// `PC` register when trying to fetch an instruction.
+        ///
+        /// This event is only fired in the simulator.
+        ///
+        /// This event is triggered on the thread pool, so a slow
+        /// event handler will not directly affect the core.
+        /// </summary>
+        public event EventHandler<InvalidProgramCounterEventArgs> InvalidProgramCounter;
+
+        /// <summary>
         /// Fires if the core fails to match a bit pattern to a
         /// known instruction. The core will immediately enter a
         /// halted state after firing this event.
@@ -201,6 +212,11 @@ namespace Lycus.Satori
                 if (pc % sizeof(ushort) != 0)
                 {
                     Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+
+                    var evt = InvalidProgramCounter;
+
+                    if (evt != null)
+                        new Task(() => evt(this, new InvalidProgramCounterEventArgs(pc))).Start();
 
                     continue;
                 }
