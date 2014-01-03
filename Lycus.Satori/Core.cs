@@ -304,15 +304,25 @@ namespace Lycus.Satori
                 if (vevt != null)
                     new Task(() => vevt(this, new ValidInstructionEventArgs(insn))).Start();
 
-                switch (op)
+                if (op == Operation.Idle)
+                    _idle = true;
+
+                var cpc = Registers.ProgramCounter;
+                var lc = Registers.LoopCounter;
+
+                // If we've reached the end of a hardware loop, jump to
+                // the starting point.
+                if (cpc == Registers.LoopEnd && lc > 0)
                 {
-                    case Operation.Next:
-                        Registers.ProgramCounter += (uint)(insn.Is16Bit ? sizeof(ushort) : sizeof(uint));
-                        break;
-                    case Operation.Idle:
-                        _idle = true;
-                        break;
+                    Registers.ProgramCounter = Registers.LoopStart;
+                    Registers.LoopCounter = lc - 1;
+
+                    // TODO: Check for various undefined behavior as
+                    // specified in the chapter about hardware loops in
+                    // the manual.
                 }
+                else if (op == Operation.Next)
+                    Registers.ProgramCounter = cpc + (uint)(insn.Is16Bit ? sizeof(ushort) : sizeof(uint));
 
                 if (Id == new CoreId(1, 1))
                     Console.ReadLine();
