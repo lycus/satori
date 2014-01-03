@@ -45,6 +45,15 @@ namespace Lycus.Satori.Instructions
             var src2 = (uint)core.Registers[OperandRegister];
             var addr = Subtract ? src1 - src2 : src1 + src2;
 
+            // This is a bit of a silly restriction in the architecture. If
+            // a core wants to `TESTSET` on a location within its local memory,
+            // it has to compute the global address of that location and use
+            // that with the `TESTSET`.
+            if (CoreId.FromAddress(addr) == CoreId.Current)
+                throw new MemoryException(
+                    "Attempted local TESTSET at 0x{0:X8}.".Interpolate(addr),
+                    addr, false);
+
             Core tgt;
             byte[] bank;
             object @lock;
@@ -57,15 +66,6 @@ namespace Lycus.Satori.Instructions
             if (tgt == null)
                 throw new MemoryException(
                     "Attempted external TESTSET at 0x{0:X8}.".Interpolate(addr),
-                    addr, false);
-
-            // This is a bit of a silly restriction in the architecture. If
-            // a core wants to `TESTSET` on a location within its local memory,
-            // it has to compute the global address of that location and use
-            // that with the `TESTSET`.
-            if (tgt == core)
-                throw new MemoryException(
-                    "Attempted local TESTSET at 0x{0:X8}.".Interpolate(addr),
                     addr, false);
 
             int value;
