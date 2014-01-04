@@ -168,7 +168,8 @@ namespace Lycus.Satori
                     "Invalid register size {0} at 0x{1:X8}.".Interpolate(size, address),
                     address, write);
 
-            if (index == 0xF0410 ||
+            if (index >= 0xF00FC && index < 0xF0400 ||
+                index == 0xF0410 ||
                 index == 0xF0444 ||
                 index >= 0xF044C && index < 0xF0500 ||
                 index >= 0xF0540 && index < 0xF0604 ||
