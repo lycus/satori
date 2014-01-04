@@ -168,8 +168,15 @@ namespace Lycus.Satori
                     "Invalid register size {0} at 0x{1:X8}.".Interpolate(size, address),
                     address, write);
 
-            // TODO: Check reads/writes to WR/RD registers and
-            // reserved register areas.
+            if (index == 0xF0410 ||
+                index == 0xF0444 ||
+                index >= 0xF044C && index < 0xF0500 ||
+                index >= 0xF0540 && index < 0xF0604 ||
+                index >= 0xF060C && index < 0xF0700 ||
+                index >= 0xF071C && index < 0xF0800)
+                throw new MemoryException(
+                    "Reserved register access at 0x{0:X8}.".Interpolate(address),
+                    address, write);
         }
 
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
