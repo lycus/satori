@@ -41,6 +41,31 @@ namespace Lycus.Satori.Instructions
 
         public override Operation Execute(Core core)
         {
+            if (core == null)
+                throw new ArgumentNullException("core");
+
+            var addr = Memory.RegisterFileAddress + 0x400;
+
+            switch (RegisterGroup)
+            {
+                case 0x0:
+                    addr += 0x000;
+                    break;
+                case 0x1:
+                    addr += 0x100;
+                    break;
+                case 0x2:
+                    addr += 0x200;
+                    break;
+                case 0x3:
+                    addr += 0x300;
+                    break;
+            }
+
+            addr += (uint)SourceRegister * 4;
+
+            core.Registers[DestinationRegister] = core.Machine.Memory.ReadInt32(core, addr);
+
             return Operation.Next;
         }
     }
