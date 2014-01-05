@@ -41,12 +41,22 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            var src = core.Registers[SourceRegister].CoerceToSingle();
+            var rn = core.Registers[SourceRegister];
+            var rd = rn.CoerceToSingle();
 
-            if (src.IsDenormal())
-                src = src.ToZero();
+            if (rd.IsDenormal())
+                rd = rd.ToZero();
 
-            core.Registers[DestinationRegister] = src.ToPositive().CoerceToInt32();
+            rd = rd.ToPositive();
+
+            core.Registers[DestinationRegister] = rd.CoerceToInt32();
+
+            core.UpdateFlagsB(
+                rd == 0.0f,
+                rd.IsNegative(),
+                rd.ExtractUnbiasedExponent() > 127,
+                float.IsNaN(rn),
+                rd.ExtractUnbiasedExponent() < -126);
 
             return Operation.Next;
         }

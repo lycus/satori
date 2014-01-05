@@ -45,40 +45,47 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            var lhs = core.Registers[SourceRegister].CoerceToSingle();
-            var rhs = core.Registers[OperandRegister].CoerceToSingle();
+            var rn = core.Registers[SourceRegister].CoerceToSingle();
+            var rm = core.Registers[OperandRegister].CoerceToSingle();
 
-            float result;
+            float rd;
 
             if (Bits.Extract(core.Registers.CoreConfig, 17, 3) == 0x0)
             {
-                if (float.IsNaN(lhs) || float.IsNaN(rhs))
+                if (float.IsNaN(rn) || float.IsNaN(rm))
                 {
                     // `float.NaN` is a quiet NaN.
                     var nan = float.NaN.CoerceToInt32();
-                    var sign = Bits.Check(lhs.CoerceToInt32(), 31) ^
-                        Bits.Check(rhs.CoerceToInt32(), 31);
+                    var sign = Bits.Check(rn.CoerceToInt32(), 31) ^
+                        Bits.Check(rm.CoerceToInt32(), 31);
 
-                    result = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
+                    rd = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
                 }
                 else
                 {
-                    if (lhs.IsDenormal())
-                        lhs = lhs.ToZero();
+                    if (rn.IsDenormal())
+                        rn = rn.ToZero();
 
-                    if (rhs.IsDenormal())
-                        rhs = rhs.ToZero();
+                    if (rm.IsDenormal())
+                        rm = rm.ToZero();
 
-                    result = lhs * rhs;
+                    rd = rn * rm;
 
-                    if (result.IsDenormal())
-                        result = result.ToZero();
+                    if (rd.IsDenormal())
+                        rd = rd.ToZero();
                 }
+
+                core.UpdateFlagsB(
+                    rd == 0.0f,
+                    rd.IsNegative(),
+                    rd.ExtractUnbiasedExponent() > 127,
+                    float.IsNaN(rn) || float.IsNaN(rm),
+                    rd.ExtractUnbiasedExponent() < -126);
             }
             else
-                result = (lhs.CoerceToInt32() * lhs.CoerceToInt32()).CoerceToSingle();
+                rd = (rn.CoerceToInt32() * rn.CoerceToInt32()).CoerceToSingle();
 
-            core.Registers[DestinationRegister] = result.CoerceToInt32();
+            core.Registers[DestinationRegister] = rd.CoerceToInt32();
 
             return Operation.Next;
         }

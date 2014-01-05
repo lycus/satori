@@ -45,9 +45,17 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            core.Registers[DestinationRegister] =
-                core.Registers[SourceRegister] +
-                core.Registers[OperandRegister];
+            var rn = core.Registers[SourceRegister];
+            var rm = core.Registers[OperandRegister];
+            var rd = rn + rm;
+
+            core.Registers[DestinationRegister] = rd;
+
+            core.UpdateFlagsA(
+                rd == 0,
+                rd < 0,
+                rd < rn,
+                rn < 0 == rm < 0 && rd < 0 == rn < 0);
 
             return Operation.Next;
         }
