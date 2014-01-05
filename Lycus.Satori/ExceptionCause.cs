@@ -11,7 +11,7 @@
         /// </summary>
         None,
         /// <summary>
-        /// Unimplemented instruction.
+        /// Triggered by an `UNIMPL` instruction.
         /// </summary>
         Unimplemented,
         /// <summary>
