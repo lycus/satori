@@ -419,5 +419,48 @@ namespace Lycus.Satori
                         "condition");
             }
         }
+
+        internal void UpdateFlagsA(bool az, bool an, bool ac, bool av)
+        {
+            var status = Registers.CoreStatus;
+
+            status = Bits.Insert(status, az ? 1u : 0, 4, 1);
+            status = Bits.Insert(status, an ? 1u : 0, 5, 1);
+            status = Bits.Insert(status, ac ? 1u : 0, 6, 1);
+            status = Bits.Insert(status, av ? 1u : 0, 7, 1);
+
+            // If `AV` is set, set `AVS`, but don't clear it otherwise.
+            if (av)
+                status = Bits.Insert(status, 1, 12, 1);
+
+            Registers.CoreStatus = status;
+        }
+
+        internal void UpdateFlagsB(bool bz, bool bn, bool? bv, bool bi, bool bu)
+        {
+            var status = Registers.CoreStatus;
+
+            status = Bits.Insert(status, bz ? 1u : 0, 8, 1);
+            status = Bits.Insert(status, bn ? 1u : 0, 9, 1);
+
+            if (bv != null)
+            {
+                status = Bits.Insert(status, (bool)bv ? 1u : 0, 10, 1);
+
+                // If `BV` is set, set `BVS`, but don't clear it otherwise.
+                if ((bool)bv)
+                    status = Bits.Insert(status, 1, 14, 1);
+            }
+
+            // We set `BIS`, but never clear it.
+            if (bi)
+                status = Bits.Insert(status, 1, 13, 0);
+
+            // We set `BUS`, but never clear it.
+            if (bu)
+                status = Bits.Insert(status, 1, 15, 0);
+
+            Registers.CoreStatus = status;
+        }
     }
 }
