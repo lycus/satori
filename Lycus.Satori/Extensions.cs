@@ -166,6 +166,11 @@ namespace Lycus.Satori
             return Bits.Extract(value.CoerceToInt32(), 22, 8);
         }
 
+        public static int ExtractUnbiasedExponent(this float value)
+        {
+            return value.ExtractExponent() - 127;
+        }
+
         public static bool ExtractSign(this float value)
         {
             return Bits.Check(value.CoerceToInt32(), 31);
