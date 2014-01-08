@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -176,6 +177,7 @@ namespace Lycus.Satori
             return Bits.Check(value.CoerceToInt32(), 31);
         }
 
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormal")]
         public static bool IsDenormal(this float value)
         {
             return value.ExtractExponent() == 0 && value.ExtractMantissa() != 0;
