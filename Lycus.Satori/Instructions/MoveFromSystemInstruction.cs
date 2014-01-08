@@ -20,8 +20,7 @@ namespace Lycus.Satori.Instructions
         {
         }
 
-        [CLSCompliant(false)]
-        public uint RegisterGroup { get; set; }
+        public RegisterGroup RegisterGroup { get; set; }
 
         public int SourceRegister { get; set; }
 
@@ -35,7 +34,7 @@ namespace Lycus.Satori.Instructions
             if (Is16Bit)
                 return;
 
-            RegisterGroup = Bits.Extract(Value, 20, 2);
+            RegisterGroup = (RegisterGroup)Bits.Extract(Value, 20, 2);
             SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
             DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
         }
@@ -46,7 +45,7 @@ namespace Lycus.Satori.Instructions
                 throw new ArgumentNullException("core");
 
             var addr = Memory.RegisterFileAddress + 0x400 +
-                RegisterGroup * 0x100 +
+                (uint)RegisterGroup * 0x100 +
                 (uint)SourceRegister * sizeof(uint);
 
             core.Registers[DestinationRegister] = core.Machine.Memory.ReadInt32(core, addr);
