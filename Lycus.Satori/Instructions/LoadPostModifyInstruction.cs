@@ -37,7 +37,10 @@ namespace Lycus.Satori.Instructions
             DestinationRegister = (int)Bits.Extract(Value, 13, 3) | (int)Bits.Extract(Value, 29, 3) << 3;
             Size = (Size)Bits.Extract(Value, 5, 2);
             Subtract = Bits.Check(Value, 20);
+        }
 
+        public override void Check()
+        {
             if (Size == Size.Int64 && DestinationRegister % 2 != 0)
                 throw InstructionException();
         }

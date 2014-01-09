@@ -39,6 +39,10 @@ namespace Lycus.Satori
         {
         }
 
+        public virtual void Check()
+        {
+        }
+
         public abstract Operation Execute(Core core);
 
         public override string ToString()

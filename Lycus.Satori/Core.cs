@@ -271,9 +271,11 @@ namespace Lycus.Satori
                     continue;
                 }
 
+                insn.Decode();
+
                 try
                 {
-                    insn.Decode();
+                    insn.Check();
                 }
                 catch (InstructionException)
                 {
