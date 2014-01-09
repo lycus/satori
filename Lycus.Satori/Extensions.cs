@@ -157,6 +157,25 @@ namespace Lycus.Satori
             }
         }
 
+        public static string ToAssemblyString(this Size size)
+        {
+            switch (size)
+            {
+                case Size.Int8:
+                    return "b";
+                case Size.Int16:
+                    return "h";
+                case Size.Int32:
+                    return string.Empty;
+                case Size.Int64:
+                    return "d";
+                default:
+                    throw new ArgumentException(
+                        "Invalid Size value ({0}).".Interpolate(size),
+                        "size");
+            }
+        }
+
         public static int ExtractMantissa(this float value)
         {
             return Bits.Extract(value.CoerceToInt32(), 0, 22);
