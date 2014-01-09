@@ -274,13 +274,13 @@ namespace Lycus.Satori
                 case 0x00000009:
                     if (!Bits.Check(value, 22))
                     {
+                        if (!Bits.Check(value, 4))
+                            return new LoadIndexInstruction(value, false);
+
                         if (Bits.Check(value, 21))
                             return new TestSetInstruction(value);
 
-                        if (Bits.Check(value, 4))
-                            return new StoreIndexInstruction(value, false);
-
-                        return new LoadIndexInstruction(value, false);
+                        return new StoreIndexInstruction(value, false);
                     }
 
                     break;

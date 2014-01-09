@@ -20,6 +20,8 @@ namespace Lycus.Satori.Instructions
         {
         }
 
+        public Size Size { get; set; }
+
         public bool Subtract { get; set; }
 
         public int SourceRegister { get; set; }
@@ -33,7 +35,14 @@ namespace Lycus.Satori.Instructions
             SourceRegister = (int)Bits.Extract(Value, 13, 3) | (int)Bits.Extract(Value, 29, 3) << 3;
             OperandRegister = (int)Bits.Extract(Value, 7, 3) | (int)Bits.Extract(Value, 23, 3) << 3;
             DestinationRegister = (int)Bits.Extract(Value, 10, 3) | (int)Bits.Extract(Value, 26, 3) << 3;
+            Size = (Size)Bits.Extract(Value, 5, 2);
             Subtract = Bits.Check(Value, 20);
+        }
+
+        public override void Check()
+        {
+            if (Size != Size.Int32)
+                throw InstructionException();
         }
 
         public override Operation Execute(Core core)
