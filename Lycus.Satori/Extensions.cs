@@ -3,11 +3,13 @@ using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
+using JetBrains.Annotations;
 
 namespace Lycus.Satori
 {
     public static class Extensions
     {
+        [StringFormatMethod("format")]
         public static string Interpolate(this string format, params object[] args)
         {
             if (format == null)
