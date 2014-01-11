@@ -24,6 +24,8 @@ namespace Lycus.Satori
             }
         }
 
+        public bool IgnoreEnvironmentVariable { get; set; }
+
         protected virtual void Dispose(bool disposing)
         {
         }
@@ -40,9 +42,9 @@ namespace Lycus.Satori
             GC.SuppressFinalize(this);
         }
 
-        static bool HaveLogLevel(params string[] levels)
+        bool HaveLogLevel(params string[] levels)
         {
-            return levels.Contains(Environment.GetEnvironmentVariable("SATORI_LOG"));
+            return !IgnoreEnvironmentVariable && levels.Contains(Environment.GetEnvironmentVariable("SATORI_LOG"));
         }
 
         public void Verbose(string format, params object[] args)
