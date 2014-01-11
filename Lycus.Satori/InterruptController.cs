@@ -108,25 +108,26 @@ namespace Lycus.Satori
             }
 
             var exCause = 0;
+            var iv = Core.Machine.Architecture == Architecture.EpiphanyIV;
 
             switch (cause)
             {
                 case ExceptionCause.None:
                     break;
                 case ExceptionCause.Unimplemented:
-                    exCause = Core.Machine.Architecture == Architecture.EpiphanyIV ? 0xF : 0x4;
+                    exCause = iv ? 0xF : 0x4;
                     break;
                 case ExceptionCause.SoftwareInterrupt:
-                    exCause = Core.Machine.Architecture == Architecture.EpiphanyIV ? 0xE : 0x1;
+                    exCause = iv ? 0xE : 0x1;
                     break;
                 case ExceptionCause.UnalignedAccess:
-                    exCause = Core.Machine.Architecture == Architecture.EpiphanyIV ? 0xD : 0x2;
+                    exCause = iv ? 0xD : 0x2;
                     break;
                 case ExceptionCause.IllegalAccess:
-                    exCause = Core.Machine.Architecture == Architecture.EpiphanyIV ? 0xC : 0x5;
+                    exCause = iv ? 0xC : 0x5;
                     break;
                 case ExceptionCause.FloatingPoint:
-                    exCause = Core.Machine.Architecture == Architecture.EpiphanyIV ? 0x7 : 0x3;
+                    exCause = iv ? 0x7 : 0x3;
                     break;
                 default:
                     throw new ArgumentException(
@@ -139,7 +140,7 @@ namespace Lycus.Satori
                 Core.Registers.InterruptLatch = Bits.Set(Core.Registers.InterruptLatch, (int)priority);
 
                 if (cause != ExceptionCause.None)
-                    Core.Registers.CoreStatus = Bits.Insert(Core.Registers.CoreStatus, (uint)exCause, 16, 4);
+                    Core.Registers.CoreStatus = Bits.Insert(Core.Registers.CoreStatus, (uint)exCause, 16, iv ? 4 : 3);
             }
         }
     }
