@@ -70,5 +70,10 @@ namespace Lycus.Satori.Instructions
 
             return Operation.Next;
         }
+
+        public override string ToString()
+        {
+            return "{0} r{1}, r{2}".Interpolate(Mnemonic, DestinationRegister, SourceRegister);
+        }
     }
 }

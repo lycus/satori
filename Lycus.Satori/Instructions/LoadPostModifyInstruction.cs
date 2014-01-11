@@ -77,5 +77,11 @@ namespace Lycus.Satori.Instructions
 
             return Operation.Next;
         }
+
+        public override string ToString()
+        {
+            return "{0}{1} r{2}, [r{3}], {4}r{5}".Interpolate(Mnemonic, Size.ToAssemblyString(),
+                DestinationRegister, SourceRegister, Subtract ? "-" : "+", OperandRegister);
+        }
     }
 }
