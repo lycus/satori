@@ -576,7 +576,7 @@ namespace Lycus.Satori
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rn")]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "rm")]
-        public TestSetInstruction TestSet(int rd, int rn, int rm, bool subtract)
+        public TestSetInstruction TestSet(int rd, int rn, int rm)
         {
             return Emit(new TestSetInstruction
             {
@@ -584,7 +584,6 @@ namespace Lycus.Satori
                 SourceRegister = rn,
                 OperandRegister = rm,
                 DestinationRegister = rd,
-                Subtract = subtract,
             });
         }
 

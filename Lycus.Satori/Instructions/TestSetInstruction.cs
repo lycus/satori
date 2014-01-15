@@ -22,8 +22,6 @@ namespace Lycus.Satori.Instructions
 
         public Size Size { get; set; }
 
-        public bool Subtract { get; set; }
-
         public int SourceRegister { get; set; }
 
         public int OperandRegister { get; set; }
@@ -36,7 +34,7 @@ namespace Lycus.Satori.Instructions
             OperandRegister = (int)Bits.Extract(Value, 7, 3) | (int)Bits.Extract(Value, 23, 3) << 3;
             DestinationRegister = (int)Bits.Extract(Value, 10, 3) | (int)Bits.Extract(Value, 26, 3) << 3;
             Size = (Size)Bits.Extract(Value, 5, 2);
-            Subtract = Bits.Check(Value, 20);
+            Bits.Check(Value, 20);
         }
 
         public override void Check()
@@ -50,9 +48,8 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            var src1 = (uint)core.Registers[SourceRegister];
-            var src2 = (uint)core.Registers[OperandRegister];
-            var addr = Subtract ? src1 - src2 : src1 + src2;
+            var addr = (uint)(core.Registers[SourceRegister] +
+                core.Registers[OperandRegister]);
 
             // This is a bit of a silly restriction in the architecture. If
             // a core wants to `TESTSET` on a location within its local memory,
@@ -94,8 +91,8 @@ namespace Lycus.Satori.Instructions
 
         public override string ToString()
         {
-            return "{0} r{1}, [r{2}, {3}r{4}]".Interpolate(Mnemonic, DestinationRegister,
-                SourceRegister, Subtract ? "-" : "+", OperandRegister);
+            return "{0} r{1}, [r{2}, r{3}]".Interpolate(Mnemonic, DestinationRegister,
+                SourceRegister, OperandRegister);
         }
     }
 }
