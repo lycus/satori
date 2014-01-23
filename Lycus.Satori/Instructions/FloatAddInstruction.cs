@@ -84,7 +84,18 @@ namespace Lycus.Satori.Instructions
                     rd.ExtractUnbiasedExponent() < -126);
             }
             else
-                rd = (rn.CoerceToInt32() + rn.CoerceToInt32()).CoerceToSingle();
+            {
+                var res = rn.CoerceToInt32() + rn.CoerceToInt32();
+
+                rd = res.CoerceToSingle();
+
+                core.UpdateFlagsB(
+                    res == 0,
+                    res < 0,
+                    null,
+                    false,
+                    false);
+            }
 
             core.Registers[DestinationRegister] = rd.CoerceToInt32();
 

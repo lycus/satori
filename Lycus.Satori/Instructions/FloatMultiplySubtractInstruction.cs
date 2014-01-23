@@ -81,7 +81,18 @@ namespace Lycus.Satori.Instructions
                 }
             }
             else
-                result = (src1.CoerceToInt32() - src2.CoerceToInt32() * src3.CoerceToInt32()).CoerceToSingle();
+            {
+                var res = src1.CoerceToInt32() - src2.CoerceToInt32() * src2.CoerceToInt32();
+
+                result = res.CoerceToSingle();
+
+                core.UpdateFlagsB(
+                    res == 0,
+                    res < 0,
+                    null,
+                    false,
+                    false);
+            }
 
             core.Registers[DestinationRegister] = result.CoerceToInt32();
 

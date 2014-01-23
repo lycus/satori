@@ -456,11 +456,11 @@ namespace Lycus.Satori
 
             // We set `BIS`, but never clear it.
             if (bi)
-                status = Bits.Insert(status, 1, 13, 0);
+                status = Bits.Insert(status, 1, 13, 1);
 
             // We set `BUS`, but never clear it.
             if (bu)
-                status = Bits.Insert(status, 1, 15, 0);
+                status = Bits.Insert(status, 1, 15, 1);
 
             Registers.CoreStatus = status;
         }
