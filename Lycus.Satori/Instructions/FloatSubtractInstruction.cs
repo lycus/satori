@@ -56,7 +56,8 @@ namespace Lycus.Satori.Instructions
                 {
                     // `float.NaN` is a quiet NaN.
                     var nan = float.NaN.CoerceToInt32();
-                    var sign = Bits.Check(rn.CoerceToInt32(), 31) ^
+                    var sign = float.IsNaN(rn) ?
+                        Bits.Check(rn.CoerceToInt32(), 31) :
                         Bits.Check(rm.CoerceToInt32(), 31);
 
                     rd = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
