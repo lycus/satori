@@ -76,7 +76,11 @@ namespace Lycus.Satori.Instructions
                     rd = rn + rm;
 
                     if (rd.IsDenormal())
+                    {
                         rd = rd.ToZero();
+
+                        core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+                    }
                 }
 
                 core.UpdateFlagsB(

@@ -80,7 +80,11 @@ namespace Lycus.Satori.Instructions
                     result = src1 + src2 * src3;
 
                     if (result.IsDenormal())
+                    {
                         result = result.ToZero();
+
+                        core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+                    }
                 }
             }
             else
