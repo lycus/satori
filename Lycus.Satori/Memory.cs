@@ -149,14 +149,14 @@ namespace Lycus.Satori
             return address;
         }
 
-        void CheckRegisterAccess(byte[] bank, uint address,
+        bool CheckRegisterAccess(byte[] bank, uint address,
             uint index, int size, bool write)
         {
             if (bank == _external)
-                return;
+                return false;
 
             if (index < RegisterFileAddress || index >= RegisterFileSize)
-                return;
+                return false;
 
             if (address % sizeof(uint) != 0)
                 throw new MemoryException(
@@ -178,6 +178,12 @@ namespace Lycus.Satori
                 throw new MemoryException(
                     "Reserved register access at 0x{0:X8}.".Interpolate(address),
                     address, write);
+
+            return true;
+        }
+
+        unsafe void HandleRegisterWrite(uint index, int* value)
+        {
         }
 
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
@@ -193,10 +199,15 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, true);
 
-            CheckRegisterAccess(mem, address, idx, size, true);
+            if (CheckRegisterAccess(mem, address, idx, size, true))
+                HandleRegisterWrite(idx, (int*)data);
 
             lock (@lock)
                 Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
+        }
+
+        unsafe void HandleRegisterRead(uint index, int* value)
+        {
         }
 
         unsafe void RawRead(Core reader, uint address, void* data, int size)
@@ -212,7 +223,8 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
 
-            CheckRegisterAccess(mem, address, idx, size, false);
+            if (CheckRegisterAccess(mem, address, idx, size, false))
+                HandleRegisterRead(idx, (int*)data);
 
             lock (@lock)
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
