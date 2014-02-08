@@ -48,6 +48,7 @@ namespace Lycus.Satori.Instructions
             var src1 = core.Registers[DestinationRegister].CoerceToSingle();
             var src2 = core.Registers[SourceRegister].CoerceToSingle();
             var src3 = core.Registers[OperandRegister].CoerceToSingle();
+            var inf = float.IsInfinity(src1) || float.IsInfinity(src2) || float.IsInfinity(src3);
 
             float result;
 
@@ -78,12 +79,11 @@ namespace Lycus.Satori.Instructions
 
                     result = src1 - src2 * src3;
 
-                    if (result.IsDenormal())
-                    {
-                        result = result.ToZero();
-
+                    if (result.IsDenormal() || float.IsInfinity(result) && inf)
                         core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
-                    }
+
+                    if (result.IsDenormal())
+                        result = result.ToZero();
                 }
             }
             else

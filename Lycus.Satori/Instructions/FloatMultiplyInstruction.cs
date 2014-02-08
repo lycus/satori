@@ -47,6 +47,7 @@ namespace Lycus.Satori.Instructions
 
             var rn = core.Registers[SourceRegister].CoerceToSingle();
             var rm = core.Registers[OperandRegister].CoerceToSingle();
+            var inf = float.IsInfinity(rn) || float.IsInfinity(rm);
 
             float rd;
 
@@ -74,12 +75,11 @@ namespace Lycus.Satori.Instructions
 
                     rd = rn * rm;
 
-                    if (rd.IsDenormal())
-                    {
-                        rd = rd.ToZero();
-
+                    if (rd.IsDenormal() || float.IsInfinity(rd) && inf)
                         core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
-                    }
+
+                    if (rd.IsDenormal())
+                        rd = rd.ToZero();
                 }
 
                 core.UpdateFlagsB(
