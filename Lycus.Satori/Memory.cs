@@ -199,11 +199,13 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, true);
 
-            if (CheckRegisterAccess(mem, address, idx, size, true))
-                HandleRegisterWrite(idx, (int*)data);
-
             lock (@lock)
+            {
+                if (CheckRegisterAccess(mem, address, idx, size, true))
+                    HandleRegisterWrite(idx, (int*)data);
+
                 Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
+            }
         }
 
         unsafe void HandleRegisterRead(uint index, int* value)
@@ -223,11 +225,13 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
 
-            if (CheckRegisterAccess(mem, address, idx, size, false))
-                HandleRegisterRead(idx, (int*)data);
-
             lock (@lock)
+            {
+                if (CheckRegisterAccess(mem, address, idx, size, false))
+                    HandleRegisterRead(idx, (int*)data);
+
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
+            }
         }
 
         static void CheckAlignment(uint address, int size)
