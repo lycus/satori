@@ -63,7 +63,8 @@ namespace Lycus.Satori.Instructions
 
                     rd = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
 
-                    core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+                    if (Bits.Check(core.Registers.CoreConfig, 1))
+                        core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
                 }
                 else
                 {
@@ -75,7 +76,8 @@ namespace Lycus.Satori.Instructions
 
                     rd = rn - rm;
 
-                    if (rd.IsDenormal() || float.IsInfinity(rd) && inf)
+                    if (rd.IsDenormal() && Bits.Check(core.Registers.CoreConfig, 3) ||
+                        float.IsInfinity(rd) && inf && Bits.Check(core.Registers.CoreConfig, 2))
                         core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
 
                     if (rd.IsDenormal())

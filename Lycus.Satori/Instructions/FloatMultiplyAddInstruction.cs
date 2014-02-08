@@ -65,7 +65,8 @@ namespace Lycus.Satori.Instructions
 
                     result = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
 
-                    core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+                    if (Bits.Check(core.Registers.CoreConfig, 1))
+                        core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
                 }
                 else
                 {
@@ -80,7 +81,8 @@ namespace Lycus.Satori.Instructions
 
                     result = src1 + src2 * src3;
 
-                    if (result.IsDenormal() || float.IsInfinity(result) && inf)
+                    if (result.IsDenormal() && Bits.Check(core.Registers.CoreConfig, 3) ||
+                        float.IsInfinity(result) && inf && Bits.Check(core.Registers.CoreConfig, 2))
                         core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
 
                     if (result.IsDenormal())
