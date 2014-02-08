@@ -68,6 +68,9 @@ namespace Lycus.Satori.Instructions
 
             core.Registers[DestinationRegister] = result;
 
+            if (float.IsInfinity(src) || src.IsDenormal())
+                core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+
             return Operation.Next;
         }
 
