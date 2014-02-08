@@ -32,6 +32,8 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
+            core.Registers.DebugStatus = Bits.Set(core.Registers.DebugStatus, 0);
+
             if (Code == 7 && core.Machine.Kernel.Capabilities.HasFlag(Capabilities.SystemCalls))
             {
                 var r0 = core.Registers[0];
@@ -45,6 +47,8 @@ namespace Lycus.Satori.Instructions
                 core.Registers[1] = r1;
                 core.Registers[2] = r2;
                 core.Registers[3] = r3;
+
+                core.Registers.DebugStatus = Bits.Clear(core.Registers.DebugStatus, 0);
             }
             else
             {
@@ -60,8 +64,6 @@ namespace Lycus.Satori.Instructions
                         core.TestFailed = true;
                         break;
                 }
-
-                core.Registers.CoreStatusStore = Bits.Clear(core.Registers.CoreStatus, 0);
             }
 
             return Operation.Next;

@@ -25,7 +25,17 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            // Currently, we simply ignore this.
+            // Set `HALT` and `MBKPT_FLAG` on all cores.
+            foreach (var c in core.Machine.Cores)
+            {
+                var ds = c.Registers.DebugStatus;
+
+                ds = Bits.Set(ds, 0);
+                ds = Bits.Set(ds, 2);
+
+                c.Registers.DebugStatus = ds;
+            }
+
             return Operation.Next;
         }
     }

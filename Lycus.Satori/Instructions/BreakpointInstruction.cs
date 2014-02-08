@@ -25,7 +25,8 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            // Currently, we simply ignore this.
+            core.Registers.DebugStatus = Bits.Set(core.Registers.DebugStatus, 0);
+
             return Operation.Next;
         }
     }
