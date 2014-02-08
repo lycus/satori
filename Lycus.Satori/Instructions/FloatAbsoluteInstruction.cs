@@ -53,8 +53,8 @@ namespace Lycus.Satori.Instructions
             if (core == null)
                 throw new ArgumentNullException("core");
 
-            var rn = core.Registers[SourceRegister];
-            var rd = rn.CoerceToSingle();
+            var rn = core.Registers[SourceRegister].CoerceToSingle();
+            var rd = rn;
 
             if (rd.IsDenormal())
                 rd = rd.ToZero();
@@ -70,7 +70,7 @@ namespace Lycus.Satori.Instructions
                 float.IsNaN(rn),
                 rd.ExtractUnbiasedExponent() < -126);
 
-            if (float.IsNaN(rn.CoerceToSingle()))
+            if (float.IsNaN(rn))
                 core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
 
             return Operation.Next;
