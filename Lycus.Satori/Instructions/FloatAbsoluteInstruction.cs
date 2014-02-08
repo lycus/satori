@@ -70,6 +70,9 @@ namespace Lycus.Satori.Instructions
                 float.IsNaN(rn),
                 rd.ExtractUnbiasedExponent() < -126);
 
+            if (float.IsNaN(rn.CoerceToSingle()))
+                core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
+
             return Operation.Next;
         }
 

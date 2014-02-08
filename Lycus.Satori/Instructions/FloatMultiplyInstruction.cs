@@ -61,6 +61,8 @@ namespace Lycus.Satori.Instructions
                         Bits.Check(rm.CoerceToInt32(), 31);
 
                     rd = Bits.Insert(nan, sign ? 1 : 0, 31, 1);
+
+                    core.Interrupts.Trigger(Interrupt.SoftwareException, ExceptionCause.FloatingPoint);
                 }
                 else
                 {
