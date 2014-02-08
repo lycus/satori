@@ -159,6 +159,8 @@ namespace Lycus.Satori
                 if (tevt != null)
                     new Task(() => tevt(this, new TickEventArgs(_idle))).Start();
 
+                Debugger.Update();
+
                 Timer.IncrementClockCycles();
 
                 // Perform any DMA work that might have been scheduled.
@@ -185,8 +187,6 @@ namespace Lycus.Satori
 
                     _idle = false;
                 }
-
-                Debugger.Update();
 
                 // If the `ACTIVE` bit is zero, just sleep until something
                 // wakes us up (such as a library user or debugger).
