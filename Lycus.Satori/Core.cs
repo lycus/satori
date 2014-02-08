@@ -186,19 +186,12 @@ namespace Lycus.Satori
                     _idle = false;
                 }
 
-                // Has the debug unit requested that we halt? If so, set
-                // `ACTIVE` to zero and wait for something external to
-                // wake us up.
-                if (Debugger.Update())
-                {
-                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
-
-                    continue;
-                }
+                Debugger.Update();
 
                 // If the `ACTIVE` bit is zero, just sleep until something
-                // wakes us up (such as a library user).
-                if (!Bits.Check(Registers.CoreStatus, 0))
+                // wakes us up (such as a library user or debugger).
+                if (!Bits.Check(Registers.CoreStatus, 0) ||
+                    Bits.Check(Registers.DebugStatus, 0))
                 {
                     await Task.Delay(Machine.SleepDuration).ConfigureAwait(false);
 

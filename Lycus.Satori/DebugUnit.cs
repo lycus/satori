@@ -9,10 +9,9 @@
             Core = core;
         }
 
-        internal bool Update()
+        internal void Update()
         {
-            // TODO: We're disabling the debug unit entirely for now.
-            return false;
+            // TODO: Implement debugging.
         }
     }
 }
