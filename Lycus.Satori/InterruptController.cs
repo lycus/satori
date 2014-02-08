@@ -65,7 +65,7 @@ namespace Lycus.Satori
                     if (Bits.Check(Core.Registers.CoreConfig, 25))
                         status = Bits.Set(status, 2);
 
-                    Core.Registers.CoreStatus = status;
+                    Core.Registers.CoreStatusStore = status;
                     Core.Registers.ProgramCounter = (uint)(Memory.InterruptVectorAddress + i * sizeof(uint));
 
                     return true;
@@ -140,7 +140,7 @@ namespace Lycus.Satori
                 Core.Registers.InterruptLatch = Bits.Set(Core.Registers.InterruptLatch, (int)priority);
 
                 if (cause != ExceptionCause.None)
-                    Core.Registers.CoreStatus = Bits.Insert(Core.Registers.CoreStatus, (uint)exCause, 16, iv ? 4 : 3);
+                    Core.Registers.CoreStatusStore = Bits.Insert(Core.Registers.CoreStatus, (uint)exCause, 16, iv ? 4 : 3);
             }
         }
     }

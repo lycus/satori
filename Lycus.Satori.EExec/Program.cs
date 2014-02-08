@@ -179,7 +179,7 @@ namespace Lycus.Satori.EExec
 
             // Set all cores to active.
             foreach (var core in cores)
-                core.Registers.CoreStatus = Bits.Set(core.Registers.CoreStatus, 0);
+                core.Registers.CoreStatusStore = Bits.Set(core.Registers.CoreStatus, 0);
 
             while (cores.Any(x => Bits.Check(x.Registers.CoreStatus, 0)))
                 Thread.Sleep(10);

@@ -191,7 +191,7 @@ namespace Lycus.Satori
                 // wake us up.
                 if (Debugger.Update())
                 {
-                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     continue;
                 }
@@ -211,7 +211,7 @@ namespace Lycus.Satori
                 // undefined behavior results, so halt.
                 if (pc % sizeof(ushort) != 0)
                 {
-                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidProgramCounter;
 
@@ -247,7 +247,7 @@ namespace Lycus.Satori
                         {
                             // This instruction is invalid. This is undefined
                             // behavior, so just halt.
-                            Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                            Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                             var evt = InvalidInstruction;
 
@@ -261,7 +261,7 @@ namespace Lycus.Satori
                 catch (MemoryException ex)
                 {
                     // Bad PC. This is undefined behavior, so just halt.
-                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidMemoryAccess;
 
@@ -280,7 +280,7 @@ namespace Lycus.Satori
                 catch (InstructionException)
                 {
                     // See comment above.
-                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidInstructionEncoding;
 
@@ -304,7 +304,7 @@ namespace Lycus.Satori
                 {
                     // Bad memory access. This is undefined behavior, so
                     // just halt.
-                    Registers.CoreStatus = Bits.Clear(Registers.CoreStatus, 0);
+                    Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidMemoryAccess;
 
@@ -435,7 +435,7 @@ namespace Lycus.Satori
             if (av)
                 status = Bits.Insert(status, 1, 12, 1);
 
-            Registers.CoreStatus = status;
+            Registers.CoreStatusStore = status;
         }
 
         internal void UpdateFlagsB(bool bz, bool bn, bool? bv, bool bi, bool bu)
@@ -462,7 +462,7 @@ namespace Lycus.Satori
             if (bu)
                 status = Bits.Insert(status, 1, 15, 1);
 
-            Registers.CoreStatus = status;
+            Registers.CoreStatusStore = status;
         }
     }
 }

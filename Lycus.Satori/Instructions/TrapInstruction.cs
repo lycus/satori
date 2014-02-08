@@ -61,7 +61,7 @@ namespace Lycus.Satori.Instructions
                         break;
                 }
 
-                core.Registers.CoreStatus = Bits.Clear(core.Registers.CoreStatus, 0);
+                core.Registers.CoreStatusStore = Bits.Clear(core.Registers.CoreStatus, 0);
             }
 
             return Operation.Next;

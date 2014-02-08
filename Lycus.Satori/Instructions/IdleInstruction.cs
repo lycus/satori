@@ -29,7 +29,7 @@ namespace Lycus.Satori.Instructions
             // anything. However, it cannot be woken up by setting `ACTIVE`
             // in `STATUS`; instead, an interrupt (such as interrupt zero,
             // triggered by `SYNC`) must be delivered.
-            core.Registers.CoreStatus = Bits.Clear(core.Registers.CoreStatus, 0);
+            core.Registers.CoreStatusStore = Bits.Clear(core.Registers.CoreStatus, 0);
 
             return Operation.Idle;
         }

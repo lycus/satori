@@ -27,7 +27,7 @@ namespace Lycus.Satori.Instructions
                 throw new ArgumentNullException("core");
 
             // Flip the `WAND` bit on.
-            core.Registers.CoreStatus = Bits.Set(core.Registers.CoreStatus, 3);
+            core.Registers.CoreStatusStore = Bits.Set(core.Registers.CoreStatus, 3);
 
             // Check if all cores have the bit set. There is no need for
             // locking here, as the assumption is that cores will only

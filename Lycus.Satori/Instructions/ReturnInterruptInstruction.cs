@@ -39,7 +39,7 @@ namespace Lycus.Satori.Instructions
             status = Bits.Clear(status, 1); // Enable interrupts.
             status = Bits.Clear(status, 2); // Back to user mode.
 
-            core.Registers.CoreStatus = status;
+            core.Registers.CoreStatusStore = status;
             core.Registers.ProgramCounter = core.Registers.InterruptReturn;
 
             return Operation.None;
