@@ -182,8 +182,35 @@ namespace Lycus.Satori
             return true;
         }
 
-        unsafe void HandleRegisterWrite(uint index, int* value)
+        unsafe void HandleRegisterWrite(Core core, uint index, int* value)
         {
+            switch (index)
+            {
+                case 0xF0448: // DEBUGCMD
+                    var cmd = Bits.Extract(*value, 0, 2);
+
+                    switch (cmd)
+                    {
+                        case 0x0:
+                            // TODO: Clear `MBKPT_FLAG` too?
+                            core.Registers.DebugStatus = Bits.Clear(core.Registers.DebugStatus, 0);
+                            break;
+                        case 0x1:
+                            core.Registers.DebugStatus = Bits.Set(core.Registers.DebugStatus, 0);
+                            break;
+                    }
+
+                    break;
+                case 0xF070C: // RESETCORE
+                    // Zero all registers. Technically, we don't
+                    // have to zero all of them, but it's easier.
+                    if (!Bits.Check(*value, 0))
+                        Array.Clear(core.Memory, (int)RegisterFileAddress, (int)RegisterFileSize);
+
+                    // TODO: Should we set `DEBUGSTATUS`?
+
+                    break;
+            }
         }
 
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
@@ -202,13 +229,13 @@ namespace Lycus.Satori
             lock (@lock)
             {
                 if (CheckRegisterAccess(mem, address, idx, size, true))
-                    HandleRegisterWrite(idx, (int*)data);
+                    HandleRegisterWrite(tgt, idx, (int*)data);
 
                 Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
             }
         }
 
-        unsafe void HandleRegisterRead(uint index, int* value)
+        unsafe void HandleRegisterRead(Core core, uint index, int* value)
         {
         }
 
@@ -228,7 +255,7 @@ namespace Lycus.Satori
             lock (@lock)
             {
                 if (CheckRegisterAccess(mem, address, idx, size, false))
-                    HandleRegisterRead(idx, (int*)data);
+                    HandleRegisterRead(tgt, idx, (int*)data);
 
                 Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
             }
