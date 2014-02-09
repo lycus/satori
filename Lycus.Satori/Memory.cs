@@ -182,10 +182,23 @@ namespace Lycus.Satori
             return true;
         }
 
-        unsafe void HandleRegisterWrite(Core core, uint index, int* value)
+        static unsafe void HandleRegisterWrite(Core core, uint index, uint* value)
         {
             switch (index)
             {
+                case RegisterFile.CoreStatusAddress:
+                    // Never write the first three bits; instead,
+                    // preserve the ones already set.
+                    *value = Bits.Insert(*value, Bits.Extract(core.Registers.CoreStatus, 0, 3), 0, 3);
+
+                    break;
+                case RegisterFile.CoreStatusStoreAddress:
+                    // Have to bypass the regular memory access
+                    // machinery since otherwise the first three
+                    // bits are masked out.
+                    LowWrite(value, core.Memory, RegisterFile.CoreStatusAddress, sizeof(int));
+
+                    break;
                 case RegisterFile.DebugCommandAddress:
                     var cmd = Bits.Extract(*value, 0, 2);
 
@@ -210,7 +223,32 @@ namespace Lycus.Satori
                     // TODO: Should we set `DEBUGSTATUS`?
 
                     break;
+                case RegisterFile.InterruptLatchStoreAddress:
+                    var ilatst = core.Registers.InterruptLatch;
+
+                    foreach (Interrupt val in Enum.GetValues(typeof(Interrupt)))
+                        if (Bits.Check(*value, (int)val))
+                            ilatst = Bits.Set(ilatst, (int)val);
+
+                    core.Registers.InterruptLatch = ilatst;
+
+                    break;
+                case RegisterFile.InterruptLatchClearAddress:
+                    var ilatcl = core.Registers.InterruptLatch;
+
+                    foreach (Interrupt val in Enum.GetValues(typeof(Interrupt)))
+                        if (Bits.Check(*value, (int)val))
+                            ilatcl = Bits.Clear(ilatcl, (int)val);
+
+                    core.Registers.InterruptLatch = ilatcl;
+
+                    break;
             }
+        }
+
+        static unsafe void LowWrite(void* data, byte[] memory, uint index, int size)
+        {
+            Marshal.Copy(new IntPtr(data), memory, (int)index, size);
         }
 
         unsafe void RawWrite(Core writer, uint address, void* data, int size)
@@ -229,14 +267,15 @@ namespace Lycus.Satori
             lock (@lock)
             {
                 if (CheckRegisterAccess(mem, address, idx, size, true))
-                    HandleRegisterWrite(tgt, idx, (int*)data);
+                    HandleRegisterWrite(tgt, idx, (uint*)data);
 
-                Marshal.Copy(new IntPtr(data), mem, (int)idx, size);
+                LowWrite(data, mem, idx, size);
             }
         }
 
-        unsafe void HandleRegisterRead(Core core, uint index, int* value)
+        static unsafe void LowRead(byte[] memory, uint index, void* data, int size)
         {
+            Marshal.Copy(memory, (int)index, new IntPtr(data), size);
         }
 
         unsafe void RawRead(Core reader, uint address, void* data, int size)
@@ -252,13 +291,10 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
 
-            lock (@lock)
-            {
-                if (CheckRegisterAccess(mem, address, idx, size, false))
-                    HandleRegisterRead(tgt, idx, (int*)data);
+            CheckRegisterAccess(mem, address, idx, size, false);
 
-                Marshal.Copy(mem, (int)idx, new IntPtr(data), size);
-            }
+            lock (@lock)
+                LowRead(mem, idx, data, size);
         }
 
         static void CheckAlignment(uint address, int size)
