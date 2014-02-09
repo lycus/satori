@@ -186,7 +186,7 @@ namespace Lycus.Satori
         {
             switch (index)
             {
-                case 0xF0448: // DEBUGCMD
+                case RegisterFile.DebugCommandAddress:
                     var cmd = Bits.Extract(*value, 0, 2);
 
                     switch (cmd)
@@ -201,7 +201,7 @@ namespace Lycus.Satori
                     }
 
                     break;
-                case 0xF070C: // RESETCORE
+                case RegisterFile.ResetCoreAddress:
                     // Zero all registers. Technically, we don't
                     // have to zero all of them, but it's easier.
                     if (!Bits.Check(*value, 0))
