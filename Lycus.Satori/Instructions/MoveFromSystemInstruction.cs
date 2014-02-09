@@ -175,7 +175,9 @@ namespace Lycus.Satori.Instructions
                     break;
             }
 
-            throw new ArgumentException();
+            throw new ArgumentOutOfRangeException(
+                "Invalid system register value ({0}).".Interpolate(register),
+                "register");
         }
     }
 }
