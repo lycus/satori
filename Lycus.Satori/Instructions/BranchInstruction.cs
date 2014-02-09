@@ -51,7 +51,8 @@ namespace Lycus.Satori.Instructions
 
         public override string ToString()
         {
-            return "b{0} {1}".Interpolate(Condition.ToAssemblyString(), Immediate * sizeof(ushort));
+            return "{0}{1} {2}".Interpolate(Mnemonic, Condition.ToAssemblyString(),
+                Immediate * sizeof(ushort));
         }
     }
 }

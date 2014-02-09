@@ -64,7 +64,7 @@ namespace Lycus.Satori.Instructions
 
         public override string ToString()
         {
-            return "mov{0} r{1}, r{2}".Interpolate(Condition.ToAssemblyString(),
+            return "{0}{1} r{2}, r{3}".Interpolate(Mnemonic, Condition.ToAssemblyString(),
                 DestinationRegister, SourceRegister);
         }
     }
