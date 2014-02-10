@@ -23,8 +23,15 @@ Or:
 
     $ make MODE=Release
 
+The binaries will end up in the bin and lib directories.
+
 The available makefile targets are:
 
     * all: Builds the entire solution.
     * check: Runs the test suite. Builds the solution first if needed.
     * clean: Cleans up the tree (removes compiled binaries).
+    * install: Install binaries to the system.
+    * uninstall: Uninstall binaries from the system.
+
+The PREFIX variable can be set to tell the install and uninstall targets where
+to add/remove files.

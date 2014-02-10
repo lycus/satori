@@ -4,5 +4,6 @@
 *.userprefs
 
 bin/*
+lib/*
 */bin/*
 */obj/*
