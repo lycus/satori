@@ -158,7 +158,7 @@ namespace Lycus.Satori
             if (bank == _external)
                 return false;
 
-            if (index < RegisterFileAddress || index >= RegisterFileSize)
+            if (index < RegisterFileAddress || index >= RegisterFileAddress + RegisterFileSize)
                 return false;
 
             if (address % sizeof(uint) != 0)
