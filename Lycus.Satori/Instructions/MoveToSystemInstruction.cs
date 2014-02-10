@@ -46,7 +46,7 @@ namespace Lycus.Satori.Instructions
 
             var addr = Memory.RegisterFileAddress + 0x400 +
                 (uint)RegisterGroup * 0x100 +
-                (uint)SourceRegister * sizeof(uint);
+                (uint)DestinationRegister * sizeof(uint);
 
             core.Machine.Memory.Write(core, addr, core.Registers[SourceRegister]);
 
