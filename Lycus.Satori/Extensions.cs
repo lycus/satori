@@ -223,5 +223,20 @@ namespace Lycus.Satori
         {
             return Bits.Insert(value.CoerceToInt32(), 0, 0, 31).CoerceToSingle();
         }
+
+        public static int SignExtend(this int value, int bits)
+        {
+            if (bits < 1 || bits > sizeof(int) * 8 - 1)
+                throw new ArgumentOutOfRangeException("bits", bits,
+                    "Number of bits must be in the range 1 to {0}.".Interpolate(sizeof(int) * 8 - 1));
+
+            if (!Bits.Check(value, bits - 1))
+                return value;
+
+            var mask = 1 << bits - 1;
+            var value2 = value & (1 << bits) - 1;
+
+            return (value2 ^ mask) - mask;
+        }
     }
 }
