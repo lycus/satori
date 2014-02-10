@@ -202,8 +202,13 @@ namespace Lycus.Satori
                     if (!Bits.Check(value, 4))
                         return new MoveImmediateInstruction(value, true);
 
-                    if (Bits.Check(value, 5) && !Bits.Check(value, 6))
-                        return new SubtractImmediateInstruction(value, true);
+                    if (!Bits.Check(value, 6))
+                    {
+                        if (Bits.Check(value, 5))
+                            return new SubtractImmediateInstruction(value, true);
+
+                        return new AddImmediateInstruction(value, true);
+                    }
 
                     break;
                 case 0x0000000A:
@@ -226,11 +231,6 @@ namespace Lycus.Satori
                         case 0x00000007:
                             return new OrInstruction(value, true);
                     }
-
-                    break;
-                case 0x0000000B:
-                    if (Bits.Check(value, 4) && !Bits.Check(value, 5) && !Bits.Check(value, 6))
-                        return new AddImmediateInstruction(value, true);
 
                     break;
                 case 0x0000000E:
