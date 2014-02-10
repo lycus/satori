@@ -146,6 +146,7 @@
     <Compile Include="Size.cs" />
     <Compile Include="TickEventArgs.cs" />
     <Compile Include="ValidInstructionEventArgs.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Lycus.snk">

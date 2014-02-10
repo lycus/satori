@@ -54,8 +54,8 @@ namespace Lycus.Satori.Instructions
             core.UpdateFlagsA(
                 rd == 0,
                 rd < 0,
-                rd > rn,
-                rd < 0 == rn < 0 && rm < 0 == rd < 0);
+                (uint)rn < (uint)rm || rn == rm,
+                Utility.CheckedSubtract(rn, rm));
 
             return Operation.Next;
         }
