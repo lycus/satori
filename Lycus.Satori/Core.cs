@@ -221,6 +221,7 @@ namespace Lycus.Satori
                 try
                 {
                     Machine.Logger.TraceCore(this, "PC = 0x{0:X8}", pc);
+                    Machine.Logger.TraceCore(this, "FP = 0x{0:X8}", Registers[11]);
                     Machine.Logger.TraceCore(this, "SP = 0x{0:X8}", Registers[13]);
 
                     // Try to fetch an instruction. First we read a 16-bit
