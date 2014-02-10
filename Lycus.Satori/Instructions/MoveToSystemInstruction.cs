@@ -55,7 +55,7 @@ namespace Lycus.Satori.Instructions
 
         public override string ToString()
         {
-            return "{0} r{1}, r{2}".Interpolate(
+            return "{0} {1}, r{2}".Interpolate(
                 Mnemonic,
                 MoveFromSystemInstruction.StringizeRegister(RegisterGroup, DestinationRegister),
                 SourceRegister);
