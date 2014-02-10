@@ -47,7 +47,7 @@ namespace Lycus.Satori.Instructions
 
             var rn = core.Registers[SourceRegister];
             var rm = core.Registers[OperandRegister];
-            var rd = rn + rm;
+            var rd = rn - rm;
 
             core.Registers[DestinationRegister] = rd;
 
