@@ -204,6 +204,8 @@ namespace Lycus.Satori
                 // undefined behavior results, so halt.
                 if (pc % sizeof(ushort) != 0)
                 {
+                    Machine.Logger.VerboseCore(this, "[UB] Unaligned PC: 0x{0:X}", pc);
+
                     Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
                     var evt = InvalidProgramCounter;
@@ -267,6 +269,8 @@ namespace Lycus.Satori
                 }
                 catch (MemoryException ex)
                 {
+                    Machine.Logger.VerboseCore(this, "[UB] Decode memory exception: {0}", ex);
+
                     // Bad PC. This is undefined behavior, so just halt.
                     Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
@@ -284,8 +288,10 @@ namespace Lycus.Satori
                 {
                     insn.Check();
                 }
-                catch (InstructionException)
+                catch (InstructionException ex)
                 {
+                    Machine.Logger.VerboseCore(this, "[UB] Instruction exception: {0}", ex);
+
                     // See comment above.
                     Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
 
@@ -309,6 +315,8 @@ namespace Lycus.Satori
                 }
                 catch (MemoryException ex)
                 {
+                    Machine.Logger.VerboseCore(this, "[UB] Memory exception: {0}", ex);
+
                     // Bad memory access. This is undefined behavior, so
                     // just halt.
                     Registers.CoreStatusStore = Bits.Clear(Registers.CoreStatus, 0);
@@ -320,8 +328,10 @@ namespace Lycus.Satori
 
                     continue;
                 }
-                catch (DataMisalignedException)
+                catch (DataMisalignedException ex)
                 {
+                    Machine.Logger.VerboseCore(this, "[UB] Alignment exception: {0}", ex);
+
                     // We're not required to finish any memory transaction
                     // if a memory access is unaligned, so just deliver the
                     // interrupt and move on.
