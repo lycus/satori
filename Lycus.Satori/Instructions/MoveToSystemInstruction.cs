@@ -28,15 +28,15 @@ namespace Lycus.Satori.Instructions
 
         public override void Decode()
         {
-            SourceRegister = (int)Bits.Extract(Value, 10, 3);
-            DestinationRegister = (int)Bits.Extract(Value, 13, 3);
+            SourceRegister = (int)Bits.Extract(Value, 13, 3);
+            DestinationRegister = (int)Bits.Extract(Value, 10, 3);
 
             if (Is16Bit)
                 return;
 
             RegisterGroup = (RegisterGroup)Bits.Extract(Value, 20, 2);
-            SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
-            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            SourceRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            DestinationRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
         }
 
         public override Operation Execute(Core core)
