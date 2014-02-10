@@ -267,9 +267,15 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, true);
 
+            var reg = CheckRegisterAccess(mem, address, idx, size, true);
+
+            if (!reg)
+                Machine.Logger.TraceCore(writer, "Writing {0} bytes to 0x{1:X8}",
+                    size, address);
+
             lock (@lock)
             {
-                if (CheckRegisterAccess(mem, address, idx, size, true))
+                if (reg)
                     HandleRegisterWrite(tgt, idx, (uint*)data);
 
                 LowWrite(data, mem, idx, size);
@@ -294,7 +300,9 @@ namespace Lycus.Satori
                     "Out-of-bounds memory access at 0x{0:X8}.".Interpolate(address),
                     address, false);
 
-            CheckRegisterAccess(mem, address, idx, size, false);
+            if (!CheckRegisterAccess(mem, address, idx, size, false))
+                Machine.Logger.TraceCore(reader, "Reading {0} bytes from 0x{1:X8}",
+                    size, address);
 
             lock (@lock)
                 LowRead(mem, idx, data, size);
