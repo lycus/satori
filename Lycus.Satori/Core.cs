@@ -442,6 +442,9 @@ namespace Lycus.Satori
 
         internal void UpdateFlagsA(bool az, bool an, bool ac, bool av)
         {
+            Machine.Logger.TraceCore(this, "AZ = {0}, AN = {1}, AC = {2}, AV = {3}",
+                az, an, ac, av);
+
             var status = Registers.CoreStatus;
 
             status = Bits.Insert(status, az ? 1u : 0, 4, 1);
@@ -458,6 +461,9 @@ namespace Lycus.Satori
 
         internal void UpdateFlagsB(bool bz, bool bn, bool? bv, bool bi, bool bu)
         {
+            Machine.Logger.TraceCore(this, "BZ = {0}, BN = {1}, BV = {2}, BI = {3}, BU = {4}",
+                bz, bn, bv, bi, bu);
+
             var status = Registers.CoreStatus;
 
             status = Bits.Insert(status, bz ? 1u : 0, 8, 1);
