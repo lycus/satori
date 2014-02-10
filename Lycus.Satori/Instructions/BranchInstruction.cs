@@ -44,7 +44,7 @@ namespace Lycus.Satori.Instructions
             // The immediate is actually the amount of 16-bit instructions
             // to jump back/ahead. So multiply it by 2 to get the real offset
             // to add to the PC.
-            core.Registers.ProgramCounter += (uint)(Immediate * sizeof(ushort));
+            core.Registers.ProgramCounter += (uint)(Immediate.SignExtend(Is16Bit ? 8 : 24) * sizeof(ushort));
 
             return Operation.None;
         }

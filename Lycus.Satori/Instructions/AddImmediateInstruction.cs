@@ -46,7 +46,7 @@ namespace Lycus.Satori.Instructions
                 throw new ArgumentNullException("core");
 
             var rn = core.Registers[SourceRegister];
-            var rm = Immediate;
+            var rm = Immediate.SignExtend(Is16Bit ? 3 : 11);
             var rd = rn + rm;
 
             core.Registers[DestinationRegister] = rd;
