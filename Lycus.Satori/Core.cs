@@ -303,7 +303,8 @@ namespace Lycus.Satori
                     continue;
                 }
 
-                Machine.Logger.TraceCore(this, "0x{0:X8}: {1}", insn.Value, insn);
+                Machine.Logger.TraceCore(this, "0x{0:X8}: {1} {{{2}-bit}}",
+                    insn.Value, insn, insn.Is16Bit ? "16" : "32");
 
                 var isInt = Bits.Extract(Registers.CoreConfig, 17, 3) == 0x4;
 
