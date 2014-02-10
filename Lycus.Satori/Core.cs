@@ -232,7 +232,21 @@ namespace Lycus.Satori
                     // Is it a 32-bit instruction, then?
                     if (insn == null)
                     {
-                        var fullIns = Machine.Memory.ReadUInt32(this, pc);
+                        uint fullIns;
+
+                        // 4-byte instructions can be aligned on 2-byte
+                        // boundaries, but this will violate normal memory
+                        // access rules.
+                        Machine.Memory.AlignmentChecks = false;
+
+                        try
+                        {
+                            fullIns = Machine.Memory.ReadUInt32(this, pc);
+                        }
+                        finally
+                        {
+                            Machine.Memory.AlignmentChecks = true;
+                        }
 
                         insn = Machine.Fetcher.Fetch32Bit(fullIns);
 

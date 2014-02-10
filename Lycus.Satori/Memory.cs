@@ -67,6 +67,8 @@ namespace Lycus.Satori
         /// </summary>
         public object Lock { get; private set; }
 
+        internal bool AlignmentChecks { get; set; }
+
         readonly byte[] _external;
 
         internal Memory(Machine machine, int size)
@@ -74,6 +76,7 @@ namespace Lycus.Satori
             Machine = machine;
             Size = size;
             Lock = new object();
+            AlignmentChecks = true;
             _external = new byte[size];
         }
 
@@ -297,9 +300,9 @@ namespace Lycus.Satori
                 LowRead(mem, idx, data, size);
         }
 
-        static void CheckAlignment(uint address, int size)
+        void CheckAlignment(uint address, int size)
         {
-            if (address % size != 0)
+            if (AlignmentChecks && address % size != 0)
                 throw new DataMisalignedException(
                     "Unaligned memory access of size {0} at 0x{1:X8}.".Interpolate(size, address));
         }
