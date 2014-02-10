@@ -19,7 +19,14 @@ all:
 	$(XBUILD) $(XBUILD_FLAGS)
 	$(MKDIR) -p bin
 	$(CP) Lycus.Satori/bin/$(MODE)/Lycus.Satori.dll bin
+ifeq ($(MODE), Debug)
+	$(CP) Lycus.Satori/bin/$(MODE)/Lycus.Satori.dll.mdb bin
+endif
 	$(CP) Lycus.Satori.EExec/bin/$(MODE)/e-exec.exe bin
+ifeq ($(MODE), Debug)
+	$(CP) Lycus.Satori.EExec/bin/$(MODE)/e-exec.exe.mdb bin
+endif
+	$(CP) Lycus.Satori.EExec/bin/$(MODE)/e-exec.exe.config bin
 	$(SED) s/__MONO_OPTIONS__/$(mono_opt)/ e-exec.in > bin/e-exec
 	$(CHMOD) +x bin/e-exec
 
