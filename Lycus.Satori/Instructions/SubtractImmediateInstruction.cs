@@ -36,8 +36,8 @@ namespace Lycus.Satori.Instructions
                 return;
 
             SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
-            DestinationRegister = (int)Bits.Extract(Value, 29, 3) << 3;
-            Immediate |= (int)Bits.Extract(Value, 16, 8) << 8;
+            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
+            Immediate |= (int)Bits.Extract(Value, 16, 8) << 3;
         }
 
         public override Operation Execute(Core core)

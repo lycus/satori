@@ -43,7 +43,7 @@ namespace Lycus.Satori.Instructions
 
             SourceRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
             DestinationRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
-            Immediate |= Bits.Extract(Value, 16, 8) << 8;
+            Immediate |= Bits.Extract(Value, 16, 8) << 3;
             Subtract = Bits.Check(Value, 24);
         }
 

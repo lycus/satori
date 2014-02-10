@@ -37,7 +37,7 @@ namespace Lycus.Satori.Instructions
 
             SourceRegister |= (int)Bits.Extract(Value, 26, 3) << 3;
             OperandRegister |= (int)Bits.Extract(Value, 23, 3) << 3;
-            DestinationRegister = (int)Bits.Extract(Value, 29, 3) << 3;
+            DestinationRegister |= (int)Bits.Extract(Value, 29, 3) << 3;
         }
 
         public override void Check()
