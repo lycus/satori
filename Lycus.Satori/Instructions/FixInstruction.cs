@@ -62,9 +62,9 @@ namespace Lycus.Satori.Instructions
             else if (src.IsDenormal())
                 result = 0;
             else if (Bits.Check(core.Registers.CoreConfig, 0))
-                result = ((float)Math.Truncate(src)).CoerceToInt32();
+                result = (int)Math.Truncate(src);
             else
-                result = ((float)Math.Round(src)).CoerceToInt32();
+                result = (int)Math.Round(src);
 
             core.Registers[DestinationRegister] = result;
 
