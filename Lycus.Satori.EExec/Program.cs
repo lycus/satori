@@ -181,7 +181,11 @@ namespace Lycus.Satori.EExec
             foreach (var core in cores)
                 core.Registers.CoreStatusStore = Bits.Set(core.Registers.CoreStatus, 0);
 
-            while (cores.Any(x => Bits.Check(x.Registers.CoreStatus, 0)))
+            Func<Core, bool> active = c =>
+                Bits.Check(c.Registers.CoreStatus, 0) &&
+                !Bits.Check(c.Registers.DebugStatus, 0);
+
+            while (cores.Any(active))
                 Thread.Sleep(10);
 
             return cores.Any(x => x.TestFailed) ? 1 : 0;
