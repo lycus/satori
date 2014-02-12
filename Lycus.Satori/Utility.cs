@@ -4,7 +4,7 @@ namespace Lycus.Satori
 {
     static class Utility
     {
-        public static void Ignore<T>(T t)
+        public static void Ignore<T>(T value)
         {
         }
 
@@ -12,7 +12,7 @@ namespace Lycus.Satori
         {
             try
             {
-                Utility.Ignore(a + b);
+                Ignore(checked(a + b));
             }
             catch (OverflowException)
             {
@@ -26,7 +26,7 @@ namespace Lycus.Satori
         {
             try
             {
-                Utility.Ignore(a - b);
+                Ignore(checked(a - b));
             }
             catch (OverflowException)
             {
