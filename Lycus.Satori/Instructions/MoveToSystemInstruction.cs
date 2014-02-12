@@ -57,7 +57,7 @@ namespace Lycus.Satori.Instructions
         {
             return "{0} {1}, r{2}".Interpolate(
                 Mnemonic,
-                MoveFromSystemInstruction.StringizeRegister(RegisterGroup, DestinationRegister),
+                Utility.StringizeRegister(RegisterGroup, DestinationRegister),
                 SourceRegister);
         }
     }
