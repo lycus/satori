@@ -3,12 +3,11 @@ CHMOD ?= chmod
 INSTALL ?= install
 MKDIR ?= mkdir
 MODE ?= Debug
+PREFIX ?= /usr/local
 SED ?= sed
 XBUILD ?= xbuild
 
 XBUILD_FLAGS += /nologo /property:Configuration=$(MODE) /verbosity:quiet
-
-PREFIX ?= /usr/local
 
 ifeq ($(MODE), Debug)
 	override mono_opt = --debug
@@ -16,7 +15,7 @@ else
 	override mono_opt =
 endif
 
-.PHONY: all clean check
+.PHONY: all clean check install uninstall
 
 all:
 	$(XBUILD) $(XBUILD_FLAGS)
